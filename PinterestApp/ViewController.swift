@@ -14,7 +14,7 @@ class ViewController: UIViewController {
     }
 
     func initializeUI() {
-        view.backgroundColor = .white
+        view.backgroundColor = .secondarySystemBackground
 
         view.addSubview(label)
 
@@ -25,3 +25,13 @@ class ViewController: UIViewController {
         ])
     }
 }
+
+#if canImport(SwiftUI) && DEBUG
+import SwiftUI
+
+struct PreView: PreviewProvider {
+    static var previews: some View {
+        ViewController().toPreview()
+    }
+}
+#endif

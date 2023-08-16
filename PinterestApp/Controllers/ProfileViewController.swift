@@ -43,6 +43,21 @@ final class ProfileViewController: UIViewController {
 extension ProfileViewController {
     private func setupStyle() {
         view.backgroundColor = .systemBackground
+        profileView.translatesAutoresizingMaskIntoConstraints = false
+
+        EditProfileButton.translatesAutoresizingMaskIntoConstraints = false
+        EditProfileButton.backgroundColor = .systemGray
+        EditProfileButton.setTitle("Edit", for: .normal)
+        EditProfileButton.setTitleColor(.darkText, for: .normal)
+        EditProfileButton.layer.cornerRadius = 5
+
+        EditProfileButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+
+        usereCreatedLabel.translatesAutoresizingMaskIntoConstraints = false
+        usereCreatedLabel.textAlignment = .center
+        usereCreatedLabel.font = UIFont.preferredFont(forTextStyle: .headline)
+        usereCreatedLabel.adjustsFontForContentSizeCategory = true
+        usereCreatedLabel.text = "Created"
 
         scrollView.translatesAutoresizingMaskIntoConstraints = false
 
@@ -116,31 +131,5 @@ extension ProfileViewController {
     @objc
     private func buttonTapped() {
         navigationController?.pushViewController(EditProfileViewController(), animated: true)
-    }
-}
-
-extension ProfileViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let cellSpacing: CGFloat = 5
-        let screenWidth = tableView.bounds.width
-        let cellHeight = screenWidth * 0.9
-        return cellHeight + cellSpacing
-    }
-}
-
-extension ProfileViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return images.count
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileCustomCell.identifier, for: indexPath) as? ProfileCustomCell else {
-            fatalError("The TableView could not dequeue a CustomCell in ViewController.")
-        }
-
-        let image = images[indexPath.row]
-        cell.configure(with: image)
-
-        return cell
     }
 }

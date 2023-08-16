@@ -8,22 +8,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
         window?.makeKeyAndVisible()
 
-        window?.rootViewController = {
-            let tabBarController = UITabBarController()
-            tabBarController.viewControllers = [
-                createNavigationController(root: HomeViewController(), icon: "house"),
-                createNavigationController(root: NewPostViewController(), icon: "plus.app"),
-                createNavigationController(root: ProfileViewController(), icon: "person"),
-            ]
-            return tabBarController
-        }()
+        let tabBarController = UITabBarController()
 
-        func createNavigationController(root viewController: UIViewController, icon: String) -> UINavigationController {
-            let navigationController = UINavigationController(rootViewController: viewController)
+        let tabs: [(root: UIViewController, icon: String)] = [
+            (HomeViewController(), "house"),
+            (NewPostViewController(), "plus.app"),
+            (ProfileViewController(), "person"),
+        ]
+
+        tabBarController.setViewControllers(tabs.map { root, icon in
+            let navigationController = UINavigationController(rootViewController: root)
             let tabBarItem = UITabBarItem(title: nil, image: .init(systemName: icon), selectedImage: .init(systemName: "\(icon).fill"))
             navigationController.tabBarItem = tabBarItem
             return navigationController
-        }
+        }, animated: false)
+
+        window?.rootViewController = tabBarController
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {}

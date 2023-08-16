@@ -7,7 +7,7 @@ final class HomeViewController: UIViewController {
     }
 
     private func initializeUI() {
-        view.backgroundColor = .secondarySystemBackground
+        view.backgroundColor = .systemBackground
 
         let button = {
             let button = UIButton()
@@ -29,6 +29,6 @@ final class HomeViewController: UIViewController {
 
     @objc
     private func buttonTapped() {
-        print("화면 전환 테스트 코드가 필요하다면 여기 작성하세요.")
+        navigationController?.pushViewController(DetailPostViewController(), animated: true)
     }
 }

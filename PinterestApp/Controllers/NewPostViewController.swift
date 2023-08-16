@@ -7,7 +7,7 @@ final class NewPostViewController: UIViewController {
     }
 
     private func initializeUI() {
-        view.backgroundColor = .secondarySystemBackground
+        view.backgroundColor = .systemBackground
 
         let button = {
             let button = UIButton()

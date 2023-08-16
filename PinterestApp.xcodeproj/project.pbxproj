@@ -17,6 +17,9 @@
 		337630A42A8CA34C003F30B2 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337630A32A8CA34C003F30B2 /* AuthService.swift */; };
 		337630A82A8CA36E003F30B2 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337630A72A8CA36E003F30B2 /* Button.swift */; };
 		337630AB2A8CA395003F30B2 /* UIViewController+Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337630AA2A8CA395003F30B2 /* UIViewController+Preview.swift */; };
+		337630AF2A8CAE74003F30B2 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337630AE2A8CAE74003F30B2 /* HomeViewController.swift */; };
+		337630B12A8CAE7C003F30B2 /* NewPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337630B02A8CAE7C003F30B2 /* NewPostViewController.swift */; };
+		337630B32A8CAE84003F30B2 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337630B22A8CAE84003F30B2 /* ProfileViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +35,9 @@
 		337630A32A8CA34C003F30B2 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		337630A72A8CA36E003F30B2 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		337630AA2A8CA395003F30B2 /* UIViewController+Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Preview.swift"; sourceTree = "<group>"; };
+		337630AE2A8CAE74003F30B2 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		337630B02A8CAE7C003F30B2 /* NewPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPostViewController.swift; sourceTree = "<group>"; };
+		337630B22A8CAE84003F30B2 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +113,9 @@
 			isa = PBXGroup;
 			children = (
 				337630812A8CA073003F30B2 /* ViewController.swift */,
+				337630AE2A8CAE74003F30B2 /* HomeViewController.swift */,
+				337630B02A8CAE7C003F30B2 /* NewPostViewController.swift */,
+				337630B22A8CAE84003F30B2 /* ProfileViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -197,6 +206,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				337630AF2A8CAE74003F30B2 /* HomeViewController.swift in Sources */,
 				337630A82A8CA36E003F30B2 /* Button.swift in Sources */,
 				337630822A8CA073003F30B2 /* ViewController.swift in Sources */,
 				3376307E2A8CA073003F30B2 /* AppDelegate.swift in Sources */,
@@ -204,6 +214,8 @@
 				3376309F2A8CA2B2003F30B2 /* PinMedia.swift in Sources */,
 				337630A42A8CA34C003F30B2 /* AuthService.swift in Sources */,
 				337630A12A8CA331003F30B2 /* User.swift in Sources */,
+				337630B32A8CAE84003F30B2 /* ProfileViewController.swift in Sources */,
+				337630B12A8CAE7C003F30B2 /* NewPostViewController.swift in Sources */,
 				337630802A8CA073003F30B2 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

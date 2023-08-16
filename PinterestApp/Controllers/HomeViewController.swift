@@ -1,12 +1,12 @@
 import UIKit
 
-class HomeViewController: UIViewController {
+final class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initializeUI()
     }
 
-    func initializeUI() {
+    private func initializeUI() {
         view.backgroundColor = .secondarySystemBackground
 
         let button = {
@@ -28,7 +28,7 @@ class HomeViewController: UIViewController {
     }
 
     @objc
-    func buttonTapped() {
+    private func buttonTapped() {
         print("화면 전환 테스트 코드가 필요하다면 여기 작성하세요.")
     }
 }

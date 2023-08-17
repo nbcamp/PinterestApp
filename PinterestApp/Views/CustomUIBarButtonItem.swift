@@ -11,6 +11,7 @@ final class CustomUIBarButtonItem: UIBarButtonItem {
     override init() {
         super.init()
         self.title = "Done"
+        self.image
         self.style = .plain
         self.target = self
         self.action = nil
@@ -20,5 +21,4 @@ final class CustomUIBarButtonItem: UIBarButtonItem {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
 }

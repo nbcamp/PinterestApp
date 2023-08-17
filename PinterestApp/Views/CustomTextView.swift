@@ -19,20 +19,10 @@ final class CustomTextView: UITextView {
         self.font = .systemFont(ofSize: 18, weight: .medium)
         self.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         self.translatesAutoresizingMaskIntoConstraints = false
-        self.showPlaceholer()
     }
 
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    func showPlaceholer() {
-        if self.text.isEmpty {
-            self.text = "내용을 입력하세요."
-            self.textColor = .lightGray
-        } else {
-            self.text = text
-        }
     }
 }

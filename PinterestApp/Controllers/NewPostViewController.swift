@@ -5,9 +5,14 @@ final class NewPostViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = "첫번째"
         view.backgroundColor = .systemBackground
         picker.delegate = self
+        settingPicker()
+    }
+
+    func settingPicker() {
+        picker.sourceType = .photoLibrary
+        picker.allowsEditing = true
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -22,7 +27,7 @@ final class NewPostViewController: UIViewController {
 }
 
 // 2번째 페이지로 이미지를 전달할 프로토콜
-extension NewPostViewController: SendImage {
+extension NewPostViewController: EditPostViewControllerDelegate {
     func sendImage(_ imageString: UIImage) -> UIImage {
         return imageString
     }
@@ -30,14 +35,21 @@ extension NewPostViewController: SendImage {
 
 extension NewPostViewController: UIImagePickerControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
-        if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            let vc = EditPostViewController()
-            vc.delegate = self
-            vc.galleryImage = image
+        let vc = EditPostViewController()
+        vc.delegate = self
 
-            navigationController?.pushViewController(vc, animated: true)
+        if let possibleImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+            vc.galleryImage = possibleImage // 수정된 이미지가 있을 경우
+        } else if let possibleImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            vc.galleryImage = possibleImage // 원본 이미지가 있을 경우
         }
-        dismiss(animated: true, completion: nil)
+        navigationController?.pushViewController(vc, animated: true)
+        picker.dismiss(animated: true, completion: nil) // picker를 닫아줌
+    }
+
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
+        tabBarController?.selectedIndex = 0
     }
 }
 

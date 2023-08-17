@@ -10,7 +10,7 @@ import UIKit
 final class CustomLabel: UILabel {
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.textColor = .black
+        self.textColor = .label
         self.translatesAutoresizingMaskIntoConstraints = false
     }
 

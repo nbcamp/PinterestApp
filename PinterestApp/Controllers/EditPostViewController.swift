@@ -8,56 +8,92 @@
 import UIKit
 
 // 이미지 뷰 클릭시 수정 페이지로 이동시키기
-protocol SendImage {
+protocol EditPostViewControllerDelegate: class {
     func sendImage(_ imageString: UIImage) -> UIImage
 }
 
 class EditPostViewController: UIViewController {
+    let picker = UIImagePickerController()
     let customScrollView = CustomScrollView()
     let customContentView = ContentView()
-    let imageView = CustomImageView(image: nil)
+    var imageView = CustomImageView(image: nil)
     let customTextField = CustomTextField()
     let customTitleLable = CustomLabel()
     let customDetailLabel = CustomLabel()
     let customDetailTextView = CustomTextView()
     let editImageButton = CustomButton()
     let customUIBarButtonItem = CustomUIBarButtonItem()
+    let customBackButton = CustomUIBarButtonItem()
 
     var galleryImage: UIImage?
-    var delegate: SendImage?
+    weak var delegate: EditPostViewControllerDelegate?
+
+    let textViewPlaceHolder = "내용을 입력하세요."
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = "두번째"
-        view.backgroundColor = .systemOrange
+        picker.delegate = self
         customTextField.delegate = self
         customDetailTextView.delegate = self
+
         hideKeyboardWhenTappedAround()
+        setupCustomNavigationBar()
+        imageTapGesture()
+        keyboardCheck()
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        print("새로 시작함")
         setupUI()
         setupLayout()
+    }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         customTextField.becomeFirstResponder()
     }
 
-    @objc func tappedDoneButton(_ sender: UIBarButtonItem) {
-        let vc = HomeViewController()
+    @objc func customBackbuttonAction(_ sender: UIBarButtonItem) {
         navigationController?.popViewController(animated: true)
         tabBarController?.selectedIndex = 0
-
-        print("완료 눌렀다.")
     }
 
-    func setupUI() {
-        view.backgroundColor = .systemBackground
+    @objc func imageViewDBClick(sender: UITapGestureRecognizer) {
+        present(picker, animated: true)
+    }
+
+    @objc func tappedDoneButton(_ sender: UIBarButtonItem) {
+        navigationController?.popViewController(animated: true)
+        tabBarController?.selectedIndex = 0
+    }
+
+    private func imageTapGesture() {
+        let imageClickTapGesture = UITapGestureRecognizer(target: self, action: #selector(imageViewDBClick))
+        imageView.isUserInteractionEnabled = true
+        imageView.addGestureRecognizer(imageClickTapGesture)
+    }
+
+    private func setupCustomNavigationBar() {
         navigationItem.rightBarButtonItem = customUIBarButtonItem
+        navigationItem.leftBarButtonItem = customBackButton
+
         customUIBarButtonItem.target = self
         customUIBarButtonItem.action = #selector(tappedDoneButton(_:))
 
+        customBackButton.image = UIImage(systemName: "chevron.backward")
+        customBackButton.target = self
+        customBackButton.action = #selector(customBackbuttonAction(_:))
+    }
+
+    private func setupUI() {
+        view.backgroundColor = .systemBackground
+
+        customDetailTextView.text = textViewPlaceHolder
+        customDetailTextView.textColor = .lightGray
+
+        picker.sourceType = .photoLibrary
+        picker.allowsEditing = true
+
         imageView.image = galleryImage
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleToFill
 
         customTitleLable.text = "제목 입력"
 
@@ -87,7 +123,6 @@ class EditPostViewController: UIViewController {
             customScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
             customScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
             customScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0),
-            customScrollView.heightAnchor.constraint(equalToConstant: 1000),
 
             // 컨텐츠 뷰
             customContentView.topAnchor.constraint(equalTo: customScrollView.topAnchor),
@@ -101,13 +136,15 @@ class EditPostViewController: UIViewController {
             imageView.topAnchor.constraint(equalTo: customContentView.topAnchor, constant: 0),
             imageView.leadingAnchor.constraint(equalTo: customContentView.leadingAnchor, constant: 0),
             imageView.trailingAnchor.constraint(equalTo: customContentView.trailingAnchor, constant: 0),
+            imageView.bottomAnchor.constraint(equalTo: customTitleLable.topAnchor, constant: 0),
+            imageView.widthAnchor.constraint(equalToConstant: 390),
             imageView.heightAnchor.constraint(equalToConstant: 300),
 
             // 제목 입력 표시 라벨
             customTitleLable.centerXAnchor.constraint(equalTo: customScrollView.centerXAnchor),
             customTitleLable.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 0),
             customTitleLable.leadingAnchor.constraint(equalTo: customScrollView.leadingAnchor, constant: 40),
-            customTitleLable.heightAnchor.constraint(equalToConstant: 60),
+            customTitleLable.heightAnchor.constraint(equalToConstant: 40),
 
             // 제목 입력할 수 있는 텍스트 필드
             customTextField.centerXAnchor.constraint(equalTo: customScrollView.centerXAnchor),
@@ -119,17 +156,19 @@ class EditPostViewController: UIViewController {
             customDetailLabel.centerXAnchor.constraint(equalTo: customScrollView.centerXAnchor),
             customDetailLabel.topAnchor.constraint(equalTo: customTextField.bottomAnchor, constant: 5),
             customDetailLabel.leadingAnchor.constraint(equalTo: customScrollView.leadingAnchor, constant: 40),
-            customDetailLabel.heightAnchor.constraint(equalToConstant: 60),
+            customDetailLabel.heightAnchor.constraint(equalToConstant: 40),
 
             // 내용 입력할 수 있는 텍스트 뷰
             customDetailTextView.centerXAnchor.constraint(equalTo: customScrollView.centerXAnchor),
             customDetailTextView.topAnchor.constraint(equalTo: customDetailLabel.bottomAnchor, constant: 0),
-            customDetailTextView.bottomAnchor.constraint(equalTo: customScrollView.bottomAnchor, constant: -30),
+            customDetailTextView.bottomAnchor.constraint(equalTo: customScrollView.bottomAnchor, constant: -10),
             customDetailTextView.leadingAnchor.constraint(equalTo: customScrollView.leadingAnchor, constant: 40),
             customDetailTextView.heightAnchor.constraint(equalToConstant: 300),
         ])
     }
 }
+
+// MARK: - UITextFieldDelegate
 
 extension EditPostViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -138,6 +177,41 @@ extension EditPostViewController: UITextFieldDelegate {
         return true
     }
 }
+
+// MARK: - UITextViewDelegate
+
+extension EditPostViewController: UITextViewDelegate {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if text == "\n" {
+            customDetailTextView.resignFirstResponder()
+        } else {}
+
+        let inputString = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let oldString = textView.text, let newRange = Range(range, in: oldString) else { return true }
+        let newString = oldString.replacingCharacters(in: newRange, with: inputString).trimmingCharacters(in: .whitespacesAndNewlines)
+
+        let characterCount = newString.count
+        guard characterCount <= 100 else { return false }
+
+        return true
+    }
+
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if customDetailTextView.text == textViewPlaceHolder {
+            customDetailTextView.text = nil
+            customDetailTextView.textColor = .black
+        }
+    }
+
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if customDetailTextView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            customDetailTextView.text = textViewPlaceHolder
+            customDetailTextView.textColor = .lightGray
+        }
+    }
+}
+
+// MARK: - hideKeyboardWhenTappedAround
 
 extension EditPostViewController {
     func hideKeyboardWhenTappedAround() {
@@ -148,5 +222,60 @@ extension EditPostViewController {
 
     @objc func dismissKeyboard() {
         view.endEditing(true)
+    }
+}
+
+// MARK: - UIImagePickerControllerDelegate
+
+extension EditPostViewController: UIImagePickerControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+        var newImage: UIImage? // update 할 이미지
+
+        if let possibleImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+            newImage = possibleImage // 수정된 이미지가 있을 경우
+        } else if let possibleImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            galleryImage = possibleImage // 원본 이미지가 있을 경우
+        }
+
+        imageView.image = newImage // 받아온 이미지를 update
+        picker.dismiss(animated: true, completion: nil) // picker를 닫아줌
+    }
+}
+
+// MARK: - UINavigationControllerDelegate
+
+extension EditPostViewController: UINavigationControllerDelegate {}
+
+// MARK: - 키보드 올렸을 때 뷰 올리는 코드
+
+extension EditPostViewController {
+    func keyboardCheck() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow), name: UIResponder.keyboardDidShowNotification, object: nil)
+    }
+
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            if customContentView.frame.origin.y == 0 {
+                customContentView.frame.origin.y -= keyboardSize.height + UIApplication.shared.windows.first!.safeAreaInsets.bottom
+            }
+        }
+    }
+
+    @objc func keyboardDidShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            if customContentView.frame.origin.y == 0 {
+                customContentView.frame.origin.y -= keyboardSize.height - UIApplication.shared.windows.first!.safeAreaInsets.bottom
+            }
+        }
+    }
+
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if customContentView.frame.origin.y != 0 {
+            customContentView.frame.origin.y = 0
+        }
     }
 }

@@ -56,7 +56,7 @@ class EditPostViewController: UIViewController {
         tabBarController?.selectedIndex = 0
     }
 
-    @objc func imageViewDBClick(sender: UITapGestureRecognizer) {
+    @objc func imageViewClick(sender: UITapGestureRecognizer) {
         present(picker, animated: true)
     }
 
@@ -66,7 +66,7 @@ class EditPostViewController: UIViewController {
     }
 
     private func imageTapGesture() {
-        let imageClickTapGesture = UITapGestureRecognizer(target: self, action: #selector(imageViewDBClick))
+        let imageClickTapGesture = UITapGestureRecognizer(target: self, action: #selector(imageViewClick))
         imageView.isUserInteractionEnabled = true
         imageView.addGestureRecognizer(imageClickTapGesture)
     }
@@ -163,7 +163,7 @@ class EditPostViewController: UIViewController {
             customDetailTextView.topAnchor.constraint(equalTo: customDetailLabel.bottomAnchor, constant: 0),
             customDetailTextView.bottomAnchor.constraint(equalTo: customScrollView.bottomAnchor, constant: -10),
             customDetailTextView.leadingAnchor.constraint(equalTo: customScrollView.leadingAnchor, constant: 40),
-            customDetailTextView.heightAnchor.constraint(equalToConstant: 300),
+            customDetailTextView.heightAnchor.constraint(equalToConstant: 1000),
         ])
     }
 }
@@ -260,7 +260,8 @@ extension EditPostViewController {
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             if customContentView.frame.origin.y == 0 {
-                customContentView.frame.origin.y -= keyboardSize.height + UIApplication.shared.windows.first!.safeAreaInsets.bottom
+//                customContentView.frame.origin.y -= keyboardSize.height + UIApplication.shared.windows.first!.safeAreaInsets.bottom
+                customContentView.frame.origin.y -= keyboardSize.height / 2 + UIApplication.shared.windows.first!.safeAreaInsets.bottom
             }
         }
     }

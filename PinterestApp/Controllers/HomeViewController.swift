@@ -9,10 +9,7 @@ final class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initializeUI()
-        
-        MediumService.shared.load { [weak self] _ in
-            self?.collectionView.reloadData()
-        }
+        loadData()
     }
 
     private func initializeUI() {
@@ -38,6 +35,26 @@ final class HomeViewController: UIViewController {
             collectionView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
+        ])
+    }
+
+    private func loadData() {
+        let progressView = UIProgressView()
+        MediumService.shared.load { progress in
+            progressView.setProgress(Float(progress), animated: true)
+        } completion: { [weak self] _ in
+            progressView.removeFromSuperview()
+            self?.collectionView.reloadData()
+        }
+
+        view.addSubview(progressView)
+        let safeArea = view.safeAreaLayoutGuide
+        progressView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            progressView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: 50),
+            progressView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -50),
+            progressView.centerYAnchor.constraint(equalTo: safeArea.centerYAnchor),
+            progressView.heightAnchor.constraint(equalToConstant: 10),
         ])
     }
 
@@ -67,7 +84,7 @@ extension HomeViewController: UICollectionViewDataSource {
 
 extension HomeViewController: PinterestCollectionViewDelegateFlowLayout {
     var contentPadding: CGFloat { 10.0 }
-    
+
     func collectionView(_ collectionView: UICollectionView, layout: UICollectionViewLayout, contentHeightAt indexPath: IndexPath) -> CGFloat {
         let image = media[indexPath.item]
         let width = (collectionView.bounds.width - (CGFloat(columns + 1) * contentPadding)) / CGFloat(columns)

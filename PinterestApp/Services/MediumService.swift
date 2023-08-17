@@ -11,7 +11,7 @@ final class MediumService {
         media.insert(medium, at: 0)
     }
 
-    func load(completion: @escaping ([Medium]?) -> Void) {
+    func load(progress: @escaping (Double) -> Void, completion: @escaping ([Medium]?) -> Void) {
         let decoder = JSONDecoder()
         guard let location = Bundle.main.url(forResource: "images", withExtension: "json"),
               let data = try? Data(contentsOf: location),
@@ -20,7 +20,8 @@ final class MediumService {
         loading = true
         var media: [Medium] = []
         let dispatchGroup = DispatchGroup()
-        images.forEach { image in
+        var rate = (progress: 0, completion: images.count)
+        images.enumerated().forEach { _, image in
             dispatchGroup.enter()
             DispatchQueue.global().async {
                 guard let data = try? Data(contentsOf: URL(string: image.url)!),
@@ -28,6 +29,11 @@ final class MediumService {
                 else { return dispatchGroup.leave() }
                 media.append(Medium(image: uiImage, width: image.width, height: image.height))
                 dispatchGroup.leave()
+
+                DispatchQueue.main.async {
+                    progress(Double(rate.progress) / Double(rate.completion))
+                    rate.progress += 1
+                }
             }
         }
 

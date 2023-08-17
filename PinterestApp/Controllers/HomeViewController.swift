@@ -1,29 +1,18 @@
 import UIKit
 
-struct Image {
-    let url: String
-    let width: Int
-    let height: Int
-}
-
 final class HomeViewController: UIViewController {
     var collectionView: UICollectionView!
     let columns = 2
 
-    let images: [Image] = (0 ..< 100).map { _ in
-        let width = 200
-        let height = Int.random(in: 1 ... 3) * 100
-
-        return Image(
-            url: "https://picsum.photos/\(width)/\(height)",
-            width: width,
-            height: height
-        )
-    }
+    private var media: [Medium] { MediumService.shared.media }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         initializeUI()
+        
+        MediumService.shared.load { [weak self] _ in
+            self?.collectionView.reloadData()
+        }
     }
 
     private func initializeUI() {
@@ -62,7 +51,7 @@ extension HomeViewController: UICollectionViewDelegate {}
 
 extension HomeViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return images.count
+        return media.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -70,8 +59,8 @@ extension HomeViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
 
-        let image = images[indexPath.item]
-        cell.imageView.load(url: URL(string: image.url)!)
+        let medium = media[indexPath.item]
+        cell.imageView.image = medium.image
         return cell
     }
 }
@@ -80,7 +69,7 @@ extension HomeViewController: PinterestCollectionViewDelegateFlowLayout {
     var contentPadding: CGFloat { 10.0 }
     
     func collectionView(_ collectionView: UICollectionView, layout: UICollectionViewLayout, contentHeightAt indexPath: IndexPath) -> CGFloat {
-        let image = images[indexPath.item]
+        let image = media[indexPath.item]
         let width = (collectionView.bounds.width - (CGFloat(columns + 1) * contentPadding)) / CGFloat(columns)
         return width * (Double(image.height) / Double(image.width))
     }

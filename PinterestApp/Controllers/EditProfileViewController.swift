@@ -3,38 +3,31 @@ import UIKit
 final class EditProfileViewController: UIViewController {
     private var loadingView: UIView?
     
-    let navigationBar: UINavigationBar = {
-        let navigationBar = UINavigationBar()
-        navigationBar.translatesAutoresizingMaskIntoConstraints = false
-        
-        return navigationBar
-    }()
-    
     let imageView: UIImageView = {
-        let aImageView = UIImageView()
-        aImageView.backgroundColor = .white
-        aImageView.image = UIImage(named: "Idontknow")
-        aImageView.contentMode = .scaleAspectFill
-        aImageView.layer.cornerRadius = 75
-        aImageView.layer.shadowOffset = CGSize(width: 5, height: 5)
-        aImageView.layer.shadowOpacity = 0.7
-        aImageView.layer.shadowRadius = 5
-        aImageView.layer.shadowColor = UIColor.gray.cgColor
+        let ImageView = UIImageView()
+        ImageView.backgroundColor = .white
+        ImageView.image = UIImage(named: "default_profile")
+        ImageView.contentMode = .scaleAspectFill
+        ImageView.layer.cornerRadius = 75
+        ImageView.layer.shadowOffset = CGSize(width: 5, height: 5)
+        ImageView.layer.shadowOpacity = 0.7
+        ImageView.layer.shadowRadius = 5
+        ImageView.layer.shadowColor = UIColor.black.cgColor
         
-        aImageView.translatesAutoresizingMaskIntoConstraints = false
-        aImageView.clipsToBounds = true
+        ImageView.translatesAutoresizingMaskIntoConstraints = false
+        ImageView.clipsToBounds = true
         
-        return aImageView
+        return ImageView
     }()
     
-    let imagePickerController = UIImagePickerController()
+    lazy var imagePickerController = UIImagePickerController()
     
     let changeButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Change", for: .normal)
         button.addTarget(self, action: #selector(changeButtonTap), for: .touchUpInside)
-        button.setTitleColor(.black, for: .normal)
+        button.setTitleColor(.label, for: .normal)
         
         return button
     }()
@@ -44,7 +37,7 @@ final class EditProfileViewController: UIViewController {
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.text = "Name"
         nameLabel.font = UIFont.boldSystemFont(ofSize: 15)
-        nameLabel.textColor = .black
+        nameLabel.textColor = .label
         
         return nameLabel
     }()
@@ -65,40 +58,58 @@ final class EditProfileViewController: UIViewController {
         introduceLabel.translatesAutoresizingMaskIntoConstraints = false
         introduceLabel.text = "Introduce"
         introduceLabel.font = UIFont.boldSystemFont(ofSize: 15)
-        introduceLabel.textColor = .black
+        introduceLabel.textColor = .label
         
         return introduceLabel
     }()
     
-    let introduceTextView: UITextView = {
+    private lazy var introduceTextView: UITextView = {
         let textView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
-        textView.text = "Please write an introduction"
+        textView.text = "텍스트 입력"
+        textView.textColor = .placeholderText
         textView.font = UIFont.systemFont(ofSize: 17)
         textView.layer.borderColor = UIColor.lightGray.cgColor
         textView.layer.borderWidth = 1.0
-        textView.layer.cornerRadius = 15.0
+        textView.layer.cornerRadius = 10.0
+        textView.textContainerInset = UIEdgeInsets(top: 12, left: 7, bottom: 12, right: 7)
+        
+        textView.delegate = self
         
         return textView
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // initializeUI()
         
-        view.backgroundColor = .systemBackground
+        initializeUI()
         
+        addNavButtons()
         getSavedData()
-        setUpNaviBar()
         setUpImagePickerController()
         setUpViews()
         setUpConstraints()
     }
 
-    /*
-     private func initializeUI() {
-         view.backgroundColor = .systemBackground
-     }*/
+    private func addNavButtons() {
+        let leftButton = UIBarButtonItem(title: "back", style: .plain, target: self, action: #selector(backButtonTap))
+        let rightButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneButtonTap))
+        leftButton.tintColor = UIColor.label
+        rightButton.tintColor = UIColor.label
+        navigationItem.leftBarButtonItem = leftButton
+        navigationItem.rightBarButtonItem = rightButton
+              
+        let titleTextAttributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.boldSystemFont(ofSize: 21),
+            .foregroundColor: UIColor.label
+        ]
+        navigationController?.navigationBar.titleTextAttributes = titleTextAttributes
+        navigationItem.title = "Edit profile"
+    }
+    
+    private func initializeUI() {
+        view.backgroundColor = .systemBackground
+    }
     
     private func getSavedData() {
         if let savedName = UserDefaults.standard.string(forKey: "userName") {
@@ -109,24 +120,6 @@ final class EditProfileViewController: UIViewController {
             introduceTextView.text = savedIntroduce
         }
     }
-    
-    private func setUpNaviBar() {
-        let navItem = UINavigationItem(title: "Edit profile")
-        let leftButton = UIBarButtonItem(title: "back", style: .plain, target: self, action: #selector(backButtonTap))
-        let rightButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneButtonTap))
-        leftButton.tintColor = UIColor.black
-        rightButton.tintColor = UIColor.black
-        navItem.rightBarButtonItem = rightButton
-        navItem.leftBarButtonItem = leftButton
-        navigationBar.barTintColor = .systemBackground
-        navigationBar.setItems([navItem], animated: true)
-        
-        let titleTextAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.boldSystemFont(ofSize: 21),
-            .foregroundColor: UIColor.black
-        ]
-        navigationBar.titleTextAttributes = titleTextAttributes
-    }
 
     private func setUpImagePickerController() {
         imagePickerController.delegate = self
@@ -135,7 +128,7 @@ final class EditProfileViewController: UIViewController {
     }
     
     private func setUpViews() {
-        view.addSubview(navigationBar)
+        // view.addSubview(navigationBar)
         view.addSubview(imageView)
         view.addSubview(changeButton)
         view.addSubview(nameLabel)
@@ -148,16 +141,11 @@ final class EditProfileViewController: UIViewController {
         let safeArea = view.safeAreaLayoutGuide
         
         NSLayoutConstraint.activate([
-            // 네비게이션 바
-            navigationBar.topAnchor.constraint(equalTo: safeArea.topAnchor),
-            navigationBar.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
-            navigationBar.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
-            
             // 프로필 이미지뷰
             imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             imageView.widthAnchor.constraint(equalToConstant: 150),
             imageView.heightAnchor.constraint(equalToConstant: 150),
-            imageView.topAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: 16.0),
+            imageView.topAnchor.constraint(equalTo: safeArea.topAnchor, constant: 8.0),
             
             // 프로필 사진 변경 버튼
             changeButton.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 14.0),
@@ -191,7 +179,7 @@ final class EditProfileViewController: UIViewController {
     }
     
     @objc func backButtonTap() {
-        print("Back")
+        navigationController?.popViewController(animated: true)
     }
     
     @objc func doneButtonTap(_sender: Any) {
@@ -202,17 +190,13 @@ final class EditProfileViewController: UIViewController {
             
             self.dismissLoadingScreen()
         }
-        
-        print("Save Done")
     }
     
     @objc func changeButtonTap() {
         present(imagePickerController, animated: true, completion: nil)
-        
-        print("Image change")
     }
     
-    func saveData() {
+    private func saveData() {
         if let name = firstNameTextField.text {
             UserDefaults.standard.set(name, forKey: "userName")
         }
@@ -221,7 +205,7 @@ final class EditProfileViewController: UIViewController {
         }
     }
     
-    func showLoadingScreen() {
+    private func showLoadingScreen() {
         let loadingView = UIView(frame: view.bounds)
         loadingView.backgroundColor = .white
         loadingView.alpha = 0.5
@@ -236,7 +220,7 @@ final class EditProfileViewController: UIViewController {
         self.loadingView = loadingView
     }
     
-    func dismissLoadingScreen() {
+    private func dismissLoadingScreen() {
         guard let loadingView = loadingView else {
             return
         }
@@ -247,7 +231,7 @@ final class EditProfileViewController: UIViewController {
     }
 }
 
-extension EditProfileViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+extension EditProfileViewController: UIImagePickerControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         var selectedImage: UIImage?
         
@@ -262,5 +246,24 @@ extension EditProfileViewController: UIImagePickerControllerDelegate, UINavigati
         }
         
         picker.dismiss(animated: true, completion: nil)
+    }
+}
+
+extension EditProfileViewController: UINavigationControllerDelegate {
+    //
+}
+
+extension EditProfileViewController: UITextViewDelegate {
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        guard introduceTextView.textColor == .placeholderText else { return }
+        introduceTextView.textColor = .label
+        introduceTextView.text = nil
+    }
+
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if introduceTextView.text.isEmpty {
+            introduceTextView.text = "텍스트 입력"
+            introduceTextView.textColor = .placeholderText
+        }
     }
 }

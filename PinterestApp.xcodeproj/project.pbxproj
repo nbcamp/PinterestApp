@@ -123,8 +123,6 @@
 				337630AE2A8CAE74003F30B2 /* HomeViewController.swift */,
 				337630B02A8CAE7C003F30B2 /* NewPostViewController.swift */,
 				337630B22A8CAE84003F30B2 /* ProfileViewController.swift */,
-				3076FAAB2A8D411F00C47EC8 /* ProfileView.swift */,
-				3076FAAD2A8D414500C47EC8 /* ProfileCustomCell.swift */,
 				337630EC2A8CD71B003F30B2 /* EditProfileViewController.swift */,
 				337630EE2A8CD73D003F30B2 /* DetailPostViewController.swift */,
 			);
@@ -136,6 +134,8 @@
 			children = (
 				337630882A8CA074003F30B2 /* LaunchScreen.storyboard */,
 				337630A72A8CA36E003F30B2 /* Button.swift */,
+				3076FAAB2A8D411F00C47EC8 /* ProfileView.swift */,
+				3076FAAD2A8D414500C47EC8 /* ProfileCustomCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";

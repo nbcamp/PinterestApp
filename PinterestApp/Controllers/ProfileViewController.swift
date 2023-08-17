@@ -2,7 +2,7 @@ import UIKit
 
 final class ProfileViewController: UIViewController {
     let profileView = ProfileView()
-    let EditProfileButton = UIButton(type: .system)
+    let editProfileButton = UIButton(type: .system)
 
     private let tableView: UITableView = {
         let tableView = UITableView()
@@ -12,7 +12,7 @@ final class ProfileViewController: UIViewController {
         return tableView
     }()
 
-    let usereCreatedLabel = UILabel()
+    let userCreatedLabel = UILabel()
 
     private let images: [UIImage] = [
         UIImage(named: "1")!,
@@ -25,8 +25,8 @@ final class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        style()
-        layout()
+        setupStyle()
+        setupLayout()
 
         tableView.dataSource = self
         tableView.delegate = self
@@ -38,32 +38,32 @@ final class ProfileViewController: UIViewController {
 }
 
 extension ProfileViewController {
-    private func style() {
+    private func setupStyle() {
         view.backgroundColor = .systemBackground
         profileView.translatesAutoresizingMaskIntoConstraints = false
 
-        EditProfileButton.translatesAutoresizingMaskIntoConstraints = false
-        EditProfileButton.backgroundColor = .systemGray
-        EditProfileButton.setTitle("Edit", for: .normal)
-        EditProfileButton.setTitleColor(.darkText, for: .normal)
-        EditProfileButton.layer.cornerRadius = 5
+        editProfileButton.translatesAutoresizingMaskIntoConstraints = false
+        editProfileButton.backgroundColor = .systemGray
+        editProfileButton.setTitle("Edit", for: .normal)
+        editProfileButton.setTitleColor(.darkText, for: .normal)
+        editProfileButton.layer.cornerRadius = 5
 
-        EditProfileButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+        editProfileButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
 
-        usereCreatedLabel.translatesAutoresizingMaskIntoConstraints = false
-        usereCreatedLabel.textAlignment = .center
-        usereCreatedLabel.font = UIFont.preferredFont(forTextStyle: .headline)
-        usereCreatedLabel.adjustsFontForContentSizeCategory = true
-        usereCreatedLabel.text = "Created"
+        userCreatedLabel.translatesAutoresizingMaskIntoConstraints = false
+        userCreatedLabel.textAlignment = .center
+        userCreatedLabel.font = UIFont.preferredFont(forTextStyle: .headline)
+        userCreatedLabel.adjustsFontForContentSizeCategory = true
+        userCreatedLabel.text = "Created"
 
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.register(ProfileCustomCell.self, forCellReuseIdentifier: "CustomCell")
+        tableView.register(ProfileCustomCell.self, forCellReuseIdentifier: ProfileCustomCell.identifier)
     }
 
-    private func layout() {
+    private func setupLayout() {
         view.addSubview(profileView)
-        view.addSubview(EditProfileButton)
-        view.addSubview(usereCreatedLabel)
+        view.addSubview(editProfileButton)
+        view.addSubview(userCreatedLabel)
         view.addSubview(tableView)
 
         NSLayoutConstraint.activate([
@@ -73,16 +73,16 @@ extension ProfileViewController {
 
             profileView.heightAnchor.constraint(equalToConstant: 255),
 
-            EditProfileButton.topAnchor.constraint(equalToSystemSpacingBelow: profileView.bottomAnchor, multiplier: 3),
-            EditProfileButton.centerXAnchor.constraint(equalTo: profileView.centerXAnchor),
+            editProfileButton.topAnchor.constraint(equalToSystemSpacingBelow: profileView.bottomAnchor, multiplier: 3),
+            editProfileButton.centerXAnchor.constraint(equalTo: profileView.centerXAnchor),
 
-            EditProfileButton.widthAnchor.constraint(equalTo: EditProfileButton.titleLabel!.widthAnchor, constant: 16),
+            editProfileButton.widthAnchor.constraint(equalTo: editProfileButton.titleLabel!.widthAnchor, constant: 16),
 
-            usereCreatedLabel.topAnchor.constraint(equalToSystemSpacingBelow: EditProfileButton.bottomAnchor, multiplier: 5),
-            usereCreatedLabel.centerXAnchor.constraint(equalTo: profileView.centerXAnchor),
-            usereCreatedLabel.widthAnchor.constraint(equalToConstant: 100),
+            userCreatedLabel.topAnchor.constraint(equalToSystemSpacingBelow: editProfileButton.bottomAnchor, multiplier: 5),
+            userCreatedLabel.centerXAnchor.constraint(equalTo: profileView.centerXAnchor),
+            userCreatedLabel.widthAnchor.constraint(equalToConstant: 100),
 
-            tableView.topAnchor.constraint(equalToSystemSpacingBelow: usereCreatedLabel.bottomAnchor, multiplier: 1),
+            tableView.topAnchor.constraint(equalToSystemSpacingBelow: userCreatedLabel.bottomAnchor, multiplier: 1),
             tableView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.safeAreaLayoutGuide.leadingAnchor, multiplier: -3),
             tableView.trailingAnchor.constraint(equalToSystemSpacingAfter: view.safeAreaLayoutGuide.trailingAnchor, multiplier: 3),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -97,7 +97,9 @@ extension ProfileViewController {
     }
 }
 
-extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
+extension ProfileViewController: UITableViewDelegate {}
+
+extension ProfileViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return images.count
     }

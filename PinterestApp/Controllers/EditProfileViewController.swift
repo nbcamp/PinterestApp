@@ -4,20 +4,20 @@ final class EditProfileViewController: UIViewController {
     private var loadingView: UIView?
     
     let imageView: UIImageView = {
-        let ImageView = UIImageView()
-        ImageView.backgroundColor = .white
-        ImageView.image = UIImage(named: "default_profile")
-        ImageView.contentMode = .scaleAspectFill
-        ImageView.layer.cornerRadius = 75
-        ImageView.layer.shadowOffset = CGSize(width: 5, height: 5)
-        ImageView.layer.shadowOpacity = 0.7
-        ImageView.layer.shadowRadius = 5
-        ImageView.layer.shadowColor = UIColor.black.cgColor
+        let imageView = UIImageView()
+        imageView.backgroundColor = .white
+        imageView.image = UIImage(named: "default_profile")
+        imageView.contentMode = .scaleAspectFill
+        imageView.layer.cornerRadius = 75
+        imageView.layer.shadowOffset = CGSize(width: 5, height: 5)
+        imageView.layer.shadowOpacity = 0.7
+        imageView.layer.shadowRadius = 5
+        imageView.layer.shadowColor = UIColor.black.cgColor
         
-        ImageView.translatesAutoresizingMaskIntoConstraints = false
-        ImageView.clipsToBounds = true
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.clipsToBounds = true
         
-        return ImageView
+        return imageView
     }()
     
     lazy var imagePickerController = UIImagePickerController()
@@ -118,6 +118,11 @@ final class EditProfileViewController: UIViewController {
         
         if let savedIntroduce = UserDefaults.standard.string(forKey: "introduce") {
             introduceTextView.text = savedIntroduce
+            
+            if savedIntroduce == "" {
+                introduceTextView.text = "텍스트 입력"
+                introduceTextView.textColor = .placeholderText
+            }
         }
     }
 

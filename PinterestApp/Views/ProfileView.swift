@@ -9,8 +9,8 @@ class ProfileView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        style()
-        layout()
+        setupStyle()
+        setupLayout()
     }
 
     @available(*, unavailable)
@@ -20,7 +20,7 @@ class ProfileView: UIView {
 }
 
 extension ProfileView {
-    func style() {
+    func setupStyle() {
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = .systemBackground
 
@@ -52,7 +52,7 @@ extension ProfileView {
         userDetail.text = "@user 🌿 Welcome!!"
     }
 
-    func layout() {
+    func setupLayout() {
         stackView.addArrangedSubview(userImage)
         stackView.addArrangedSubview(userNameLabel)
         stackView.addArrangedSubview(userDetail)

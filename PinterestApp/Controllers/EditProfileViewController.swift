@@ -66,13 +66,13 @@ final class EditProfileViewController: UIViewController {
     private lazy var introduceTextView: UITextView = {
         let textView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
-        textView.text = "텍스트 입력"
-        textView.textColor = .placeholderText
+        textView.text = "Introduce"
         textView.font = UIFont.systemFont(ofSize: 17)
         textView.layer.borderColor = UIColor.lightGray.cgColor
         textView.layer.borderWidth = 1.0
         textView.layer.cornerRadius = 10.0
         textView.textContainerInset = UIEdgeInsets(top: 12, left: 7, bottom: 12, right: 7)
+        textView.textColor = .placeholderText
         
         textView.delegate = self
         
@@ -85,7 +85,6 @@ final class EditProfileViewController: UIViewController {
         initializeUI()
         
         addNavButtons()
-        getSavedData()
         setUpImagePickerController()
         setUpViews()
         setUpConstraints()
@@ -109,21 +108,6 @@ final class EditProfileViewController: UIViewController {
     
     private func initializeUI() {
         view.backgroundColor = .systemBackground
-    }
-    
-    private func getSavedData() {
-        if let savedName = UserDefaults.standard.string(forKey: "userName") {
-            firstNameTextField.text = savedName
-        }
-        
-        if let savedIntroduce = UserDefaults.standard.string(forKey: "introduce") {
-            introduceTextView.text = savedIntroduce
-            
-            if savedIntroduce == "" {
-                introduceTextView.text = "텍스트 입력"
-                introduceTextView.textColor = .placeholderText
-            }
-        }
     }
 
     private func setUpImagePickerController() {
@@ -191,8 +175,6 @@ final class EditProfileViewController: UIViewController {
         showLoadingScreen()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            self.saveData()
-            
             self.dismissLoadingScreen()
         }
     }
@@ -200,20 +182,11 @@ final class EditProfileViewController: UIViewController {
     @objc func changeButtonTap() {
         present(imagePickerController, animated: true, completion: nil)
     }
-    
-    private func saveData() {
-        if let name = firstNameTextField.text {
-            UserDefaults.standard.set(name, forKey: "userName")
-        }
-        if let introduce = introduceTextView.text {
-            UserDefaults.standard.set(introduce, forKey: "introduce")
-        }
-    }
-    
+
     private func showLoadingScreen() {
         let loadingView = UIView(frame: view.bounds)
         loadingView.backgroundColor = .white
-        loadingView.alpha = 0.5
+        loadingView.alpha = 0.6
         
         let activityIndicator = UIActivityIndicatorView(style: .medium)
         activityIndicator.center = loadingView.center
@@ -257,7 +230,7 @@ extension EditProfileViewController: UIImagePickerControllerDelegate {
 extension EditProfileViewController: UINavigationControllerDelegate {
     //
 }
-
+	
 extension EditProfileViewController: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         guard introduceTextView.textColor == .placeholderText else { return }
@@ -267,7 +240,7 @@ extension EditProfileViewController: UITextViewDelegate {
 
     func textViewDidEndEditing(_ textView: UITextView) {
         if introduceTextView.text.isEmpty {
-            introduceTextView.text = "텍스트 입력"
+            introduceTextView.text = "introduce"
             introduceTextView.textColor = .placeholderText
         }
     }

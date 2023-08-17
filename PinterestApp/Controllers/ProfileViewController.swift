@@ -106,7 +106,8 @@ extension ProfileViewController {
             tableView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 10),
             tableView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -10),
             tableView.bottomAnchor.constraint(equalTo: stackView.bottomAnchor),
-            tableView.heightAnchor.constraint(equalToConstant: 2000)
+            tableView.heightAnchor.constraint(equalTo: tableView.widthAnchor, multiplier: CGFloat(images.count))
+
         ])
     }
 }
@@ -118,7 +119,14 @@ extension ProfileViewController {
     }
 }
 
-extension ProfileViewController: UITableViewDelegate {}
+extension ProfileViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let cellSpacing: CGFloat = 5
+        let screenWidth = tableView.bounds.width
+        let cellHeight = screenWidth * 0.9
+        return cellHeight + cellSpacing
+    }
+}
 
 extension ProfileViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -134,9 +142,5 @@ extension ProfileViewController: UITableViewDataSource {
         cell.configure(with: image)
 
         return cell
-    }
-
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 315
     }
 }

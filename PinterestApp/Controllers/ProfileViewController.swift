@@ -45,13 +45,13 @@ extension ProfileViewController {
         view.backgroundColor = .systemBackground
         profileView.translatesAutoresizingMaskIntoConstraints = false
 
-        EditProfileButton.translatesAutoresizingMaskIntoConstraints = false
-        EditProfileButton.backgroundColor = .systemGray
-        EditProfileButton.setTitle("Edit", for: .normal)
-        EditProfileButton.setTitleColor(.darkText, for: .normal)
-        EditProfileButton.layer.cornerRadius = 5
+        editProfileButton.translatesAutoresizingMaskIntoConstraints = false
+        editProfileButton.backgroundColor = .systemGray
+        editProfileButton.setTitle("Edit", for: .normal)
+        editProfileButton.setTitleColor(.darkText, for: .normal)
+        editProfileButton.layer.cornerRadius = 5
 
-        EditProfileButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+        editProfileButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
 
         usereCreatedLabel.translatesAutoresizingMaskIntoConstraints = false
         usereCreatedLabel.textAlignment = .center

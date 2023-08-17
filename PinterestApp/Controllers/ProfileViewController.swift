@@ -109,17 +109,14 @@ extension ProfileViewController {
             profileView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
             profileView.heightAnchor.constraint(equalToConstant: 220),
 
-            // edit버튼
             editProfileButton.topAnchor.constraint(equalToSystemSpacingBelow: profileView.bottomAnchor, multiplier: 3),
             editProfileButton.centerXAnchor.constraint(equalTo: stackView.centerXAnchor),
             editProfileButton.widthAnchor.constraint(equalTo: editProfileButton.titleLabel!.widthAnchor, constant: 16),
 
-            // Created레이블
             userCreatedLabel.topAnchor.constraint(equalToSystemSpacingBelow: editProfileButton.bottomAnchor, multiplier: 5),
             userCreatedLabel.centerXAnchor.constraint(equalTo: stackView.centerXAnchor),
             userCreatedLabel.widthAnchor.constraint(equalToConstant: 100),
 
-            // 테이블뷰
             tableView.topAnchor.constraint(equalToSystemSpacingBelow: userCreatedLabel.bottomAnchor, multiplier: 1),
             tableView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 10),
             tableView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -10),

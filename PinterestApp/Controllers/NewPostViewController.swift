@@ -3,40 +3,14 @@ import UIKit
 final class NewPostViewController: UIViewController {
     let picker = UIImagePickerController()
 
-    var galleryImage: UIImage?
-
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "첫번째"
-        initializeUI()
+        view.backgroundColor = .systemBackground
         picker.delegate = self
     }
 
-    private func initializeUI() {
-        view.backgroundColor = .systemBackground
-
-        let button = {
-            let button = UIButton()
-            button.setTitle("New Post View : Button", for: .normal)
-            button.setTitleColor(.systemBlue, for: .normal)
-            button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
-            button.translatesAutoresizingMaskIntoConstraints = false
-            return button
-        }()
-
-        view.addSubview(button)
-
-        let layout = view.safeAreaLayoutGuide
-        NSLayoutConstraint.activate([
-            button.centerXAnchor.constraint(equalTo: layout.centerXAnchor),
-            button.centerYAnchor.constraint(equalTo: layout.centerYAnchor),
-        ])
-    }
-
-    @objc
-    private func buttonTapped() {
-        print("화면 전환 테스트 코드가 필요하다면 여기 작성하세요.")
-        let vc = EditPostViewController()
+    override func viewWillAppear(_ animated: Bool) {
         openLibrary()
     }
 
@@ -57,18 +31,13 @@ extension NewPostViewController: SendImage {
 extension NewPostViewController: UIImagePickerControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            galleryImage = image
-
             let vc = EditPostViewController()
             vc.delegate = self
+            vc.galleryImage = image
 
-            DispatchQueue.main.async {
-                vc.galleryImage = self.galleryImage
-            }
-
-            dismiss(animated: true, completion: nil)
             navigationController?.pushViewController(vc, animated: true)
         }
+        dismiss(animated: true, completion: nil)
     }
 }
 

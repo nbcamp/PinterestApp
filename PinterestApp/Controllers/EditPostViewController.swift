@@ -31,6 +31,7 @@ class EditPostViewController: UIViewController {
         navigationItem.title = "두번째"
         view.backgroundColor = .systemOrange
         customTextField.delegate = self
+        customDetailTextView.delegate = self
         hideKeyboardWhenTappedAround()
     }
 
@@ -42,6 +43,10 @@ class EditPostViewController: UIViewController {
     }
 
     @objc func tappedDoneButton(_ sender: UIBarButtonItem) {
+        let vc = HomeViewController()
+        navigationController?.popViewController(animated: true)
+        tabBarController?.selectedIndex = 0
+
         print("완료 눌렀다.")
     }
 

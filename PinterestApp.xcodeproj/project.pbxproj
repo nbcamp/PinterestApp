@@ -24,6 +24,9 @@
 		337630B32A8CAE84003F30B2 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337630B22A8CAE84003F30B2 /* ProfileViewController.swift */; };
 		337630ED2A8CD71B003F30B2 /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337630EC2A8CD71B003F30B2 /* EditProfileViewController.swift */; };
 		337630EF2A8CD73D003F30B2 /* DetailPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337630EE2A8CD73D003F30B2 /* DetailPostViewController.swift */; };
+		337630F52A8DB67F003F30B2 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337630F42A8DB67F003F30B2 /* Extensions.swift */; };
+		337630F72A8DCE68003F30B2 /* ImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337630F62A8DCE68003F30B2 /* ImageCollectionViewCell.swift */; };
+		337630F92A8DEE00003F30B2 /* PinterestCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337630F82A8DEE00003F30B2 /* PinterestCollectionViewFlowLayout.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +49,9 @@
 		337630B22A8CAE84003F30B2 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		337630EC2A8CD71B003F30B2 /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
 		337630EE2A8CD73D003F30B2 /* DetailPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPostViewController.swift; sourceTree = "<group>"; };
+		337630F42A8DB67F003F30B2 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		337630F62A8DCE68003F30B2 /* ImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCollectionViewCell.swift; sourceTree = "<group>"; };
+		337630F82A8DEE00003F30B2 /* PinterestCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinterestCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +101,7 @@
 				337630862A8CA074003F30B2 /* Assets.xcassets */,
 				3376307D2A8CA073003F30B2 /* AppDelegate.swift */,
 				3376307F2A8CA073003F30B2 /* SceneDelegate.swift */,
+				337630F42A8DB67F003F30B2 /* Extensions.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -136,6 +143,8 @@
 				337630A72A8CA36E003F30B2 /* Button.swift */,
 				3076FAAB2A8D411F00C47EC8 /* ProfileView.swift */,
 				3076FAAD2A8D414500C47EC8 /* ProfileCustomCell.swift */,
+				337630F62A8DCE68003F30B2 /* ImageCollectionViewCell.swift */,
+				337630F82A8DEE00003F30B2 /* PinterestCollectionViewFlowLayout.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -224,6 +233,7 @@
 				3376307E2A8CA073003F30B2 /* AppDelegate.swift in Sources */,
 				337630AB2A8CA395003F30B2 /* UIViewController+Preview.swift in Sources */,
 				3376309F2A8CA2B2003F30B2 /* PinMedia.swift in Sources */,
+				337630F72A8DCE68003F30B2 /* ImageCollectionViewCell.swift in Sources */,
 				337630A42A8CA34C003F30B2 /* AuthService.swift in Sources */,
 				337630A12A8CA331003F30B2 /* User.swift in Sources */,
 				337630ED2A8CD71B003F30B2 /* EditProfileViewController.swift in Sources */,
@@ -231,8 +241,10 @@
 				337630B12A8CAE7C003F30B2 /* NewPostViewController.swift in Sources */,
 				337630EF2A8CD73D003F30B2 /* DetailPostViewController.swift in Sources */,
 				3076FAAC2A8D411F00C47EC8 /* ProfileView.swift in Sources */,
+				337630F92A8DEE00003F30B2 /* PinterestCollectionViewFlowLayout.swift in Sources */,
 				337630802A8CA073003F30B2 /* SceneDelegate.swift in Sources */,
 				3076FAAE2A8D414500C47EC8 /* ProfileCustomCell.swift in Sources */,
+				337630F52A8DB67F003F30B2 /* Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

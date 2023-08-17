@@ -2,9 +2,14 @@ import UIKit
 
 class ProfileCustomCell: UITableViewCell {
     static let identifier = "CustomCell"
-    private let myImageView = UIImageView(image: UIImage(systemName: "questionmark"))
+    private var myImageView = UIImageView(image: UIImage(systemName: "questionmark"))
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        myImageView = UIImageView()
+        myImageView.contentMode = .scaleAspectFill
+        myImageView.clipsToBounds = true
+        myImageView.layer.cornerRadius = 5.0
+        myImageView.layer.masksToBounds = true
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
     }
@@ -28,14 +33,8 @@ extension ProfileCustomCell {
         NSLayoutConstraint.activate([
             myImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             myImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            myImageView.widthAnchor.constraint(equalToConstant: 250),
-            myImageView.heightAnchor.constraint(equalToConstant: 250)
-
-//            myImageView.topAnchor.constraint(equalTo: contentView.layoutMarginsGuide.topAnchor),
-//            myImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-//            myImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-//            myImageView.heightAnchor.constraint(equalTo: myImageView.widthAnchor),
-
+            myImageView.widthAnchor.constraint(equalToConstant: 310),
+            myImageView.heightAnchor.constraint(equalToConstant: 310)
         ])
     }
 }

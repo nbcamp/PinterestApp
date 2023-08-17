@@ -1,8 +1,8 @@
 import UIKit
 
 final class ProfileViewController: UIViewController {
-    private let scrollView = UIScrollView() // scrollView instance
-    private let stackView = UIStackView() // stackView instance
+    private let scrollView = UIScrollView()
+    private let stackView = UIStackView()
 
     let profileView = ProfileView()
     let editProfileButton = UIButton(type: .system)
@@ -44,9 +44,9 @@ extension ProfileViewController {
     private func setupStyle() {
         view.backgroundColor = .systemBackground
 
-        scrollView.translatesAutoresizingMaskIntoConstraints = false // autoLayout
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
 
-        stackView.translatesAutoresizingMaskIntoConstraints = false // autoLayout
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
 
         profileView.translatesAutoresizingMaskIntoConstraints = false
@@ -70,49 +70,43 @@ extension ProfileViewController {
     }
 
     private func setupLayout() {
-        view.addSubview(scrollView) // 뷰에 서브뷰로 추가
-        scrollView.addSubview(stackView) // stackView에 서브뷰 추가
+        view.addSubview(scrollView)
+        scrollView.addSubview(stackView)
         stackView.addSubview(profileView)
         stackView.addSubview(editProfileButton)
         stackView.addSubview(userCreatedLabel)
         stackView.addSubview(tableView)
 
         NSLayoutConstraint.activate([
-            // 스크롤뷰
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
-            // 스텍뷰
             stackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor), // 빼먹지 않기
+            stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
 
-            // 프로필뷰
             profileView.topAnchor.constraint(equalTo: stackView.topAnchor),
             profileView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
             profileView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
             profileView.heightAnchor.constraint(equalToConstant: 220),
 
-            // edit버튼
             editProfileButton.topAnchor.constraint(equalToSystemSpacingBelow: profileView.bottomAnchor, multiplier: 3),
             editProfileButton.centerXAnchor.constraint(equalTo: stackView.centerXAnchor),
             editProfileButton.widthAnchor.constraint(equalTo: editProfileButton.titleLabel!.widthAnchor, constant: 16),
 
-            // Created레이블
             userCreatedLabel.topAnchor.constraint(equalToSystemSpacingBelow: editProfileButton.bottomAnchor, multiplier: 5),
             userCreatedLabel.centerXAnchor.constraint(equalTo: stackView.centerXAnchor),
             userCreatedLabel.widthAnchor.constraint(equalToConstant: 100),
 
-            // 테이블뷰
             tableView.topAnchor.constraint(equalToSystemSpacingBelow: userCreatedLabel.bottomAnchor, multiplier: 1),
-            tableView.leadingAnchor.constraint(equalToSystemSpacingAfter: stackView.leadingAnchor, multiplier: -3),
-            tableView.trailingAnchor.constraint(equalToSystemSpacingAfter: stackView.trailingAnchor, multiplier: 3),
+            tableView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 10),
+            tableView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -10),
             tableView.bottomAnchor.constraint(equalTo: stackView.bottomAnchor),
-            tableView.heightAnchor.constraint(equalToConstant: 2500) // 테이블뷰에 높이를 줬더니 됐다!
+            tableView.heightAnchor.constraint(equalToConstant: 2000)
         ])
     }
 }
@@ -143,7 +137,6 @@ extension ProfileViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 260
-//        return tableView.frame.width
+        return 315
     }
 }

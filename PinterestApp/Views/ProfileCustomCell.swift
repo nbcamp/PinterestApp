@@ -26,10 +26,15 @@ extension ProfileCustomCell {
         myImageView.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
-            myImageView.topAnchor.constraint(equalTo: contentView.layoutMarginsGuide.topAnchor),
-            myImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            myImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            myImageView.heightAnchor.constraint(equalTo: myImageView.widthAnchor),
+            myImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            myImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            myImageView.widthAnchor.constraint(equalToConstant: 250),
+            myImageView.heightAnchor.constraint(equalToConstant: 250)
+
+//            myImageView.topAnchor.constraint(equalTo: contentView.layoutMarginsGuide.topAnchor),
+//            myImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+//            myImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+//            myImageView.heightAnchor.constraint(equalTo: myImageView.widthAnchor),
 
         ])
     }

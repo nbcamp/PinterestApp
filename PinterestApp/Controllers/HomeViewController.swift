@@ -1,9 +1,12 @@
 import UIKit
 
 final class HomeViewController: UIViewController {
+    private var columns = 2
+    private var media: [Medium] = []
+
     private lazy var flowLayout = {
         let layout = PinterestCollectionViewFlowLayout()
-        layout.numberOfColumns = 2
+        layout.numberOfColumns = columns
         layout.headerHeight = 50.0
         layout.delegate = self
         return layout
@@ -25,9 +28,6 @@ final class HomeViewController: UIViewController {
         )
         return collectionView
     }()
-
-    private let columns = 2
-    private var media: [Medium] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,22 +56,29 @@ final class HomeViewController: UIViewController {
     }
 
     private func loadData() {
+        let uiView = UIView()
         let progressView = UIProgressView()
+
         MediumService.shared.load { progress in
             progressView.setProgress(Float(progress), animated: true)
         } completion: { [weak self] media in
-            progressView.removeFromSuperview()
+            uiView.removeFromSuperview()
             self?.media = media ?? []
             self?.collectionView.reloadData()
         }
 
-        view.addSubview(progressView)
-        let safeArea = view.safeAreaLayoutGuide
+        uiView.backgroundColor = .systemBackground
+        view.addSubview(uiView)
+        uiView.addSubview(progressView)
+        uiView.translatesAutoresizingMaskIntoConstraints = false
         progressView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            progressView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: 50),
-            progressView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -50),
-            progressView.centerYAnchor.constraint(equalTo: safeArea.centerYAnchor),
+            uiView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            uiView.heightAnchor.constraint(equalTo: view.heightAnchor),
+
+            progressView.leadingAnchor.constraint(equalTo: uiView.leadingAnchor, constant: 50),
+            progressView.trailingAnchor.constraint(equalTo: uiView.trailingAnchor, constant: -50),
+            progressView.centerYAnchor.constraint(equalTo: uiView.centerYAnchor),
             progressView.heightAnchor.constraint(equalToConstant: 10),
         ])
     }

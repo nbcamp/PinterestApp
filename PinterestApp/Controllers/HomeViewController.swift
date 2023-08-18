@@ -1,24 +1,19 @@
 import UIKit
 
 final class HomeViewController: UIViewController {
-    var collectionView: UICollectionView!
-    let columns = 2
+    private var columns = 2
+    private var media: [Medium] = []
 
-    private var media: [Medium] { MediumService.shared.media }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        initializeUI()
-        loadData()
-    }
-
-    private func initializeUI() {
-        view.backgroundColor = .systemBackground
-
+    private lazy var flowLayout = {
         let layout = PinterestCollectionViewFlowLayout()
         layout.numberOfColumns = columns
+        layout.headerHeight = 50.0
         layout.delegate = self
-        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        return layout
+    }()
+
+    private lazy var collectionView = {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -26,7 +21,23 @@ final class HomeViewController: UIViewController {
             ImageCollectionViewCell.self,
             forCellWithReuseIdentifier: ImageCollectionViewCell.identifier
         )
+        collectionView.register(
+            SearchBarCollectionReusableView.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: SearchBarCollectionReusableView.identifier
+        )
+        return collectionView
+    }()
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        initializeUI()
+        setupTapGesture()
+        loadData()
+    }
+
+    private func initializeUI() {
+        view.backgroundColor = .systemBackground
         view.addSubview(collectionView)
 
         let safeArea = view.safeAreaLayoutGuide
@@ -38,33 +49,51 @@ final class HomeViewController: UIViewController {
         ])
     }
 
+    private func setupTapGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+    }
+
     private func loadData() {
+        let uiView = UIView()
         let progressView = UIProgressView()
+
         MediumService.shared.load { progress in
             progressView.setProgress(Float(progress), animated: true)
-        } completion: { [weak self] _ in
-            progressView.removeFromSuperview()
+        } completion: { [weak self] media in
+            uiView.removeFromSuperview()
+            self?.media = media ?? []
             self?.collectionView.reloadData()
         }
 
-        view.addSubview(progressView)
-        let safeArea = view.safeAreaLayoutGuide
+        uiView.backgroundColor = .systemBackground
+        view.addSubview(uiView)
+        uiView.addSubview(progressView)
+        uiView.translatesAutoresizingMaskIntoConstraints = false
         progressView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            progressView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: 50),
-            progressView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -50),
-            progressView.centerYAnchor.constraint(equalTo: safeArea.centerYAnchor),
+            uiView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            uiView.heightAnchor.constraint(equalTo: view.heightAnchor),
+
+            progressView.leadingAnchor.constraint(equalTo: uiView.leadingAnchor, constant: 50),
+            progressView.trailingAnchor.constraint(equalTo: uiView.trailingAnchor, constant: -50),
+            progressView.centerYAnchor.constraint(equalTo: uiView.centerYAnchor),
             progressView.heightAnchor.constraint(equalToConstant: 10),
         ])
     }
 
     @objc
-    private func buttonTapped() {
-        navigationController?.pushViewController(DetailPostViewController(), animated: true)
+    private func dismissKeyboard() {
+        view.endEditing(true)
     }
 }
 
-extension HomeViewController: UICollectionViewDelegate {}
+extension HomeViewController: UICollectionViewDelegate {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        dismissKeyboard()
+    }
+}
 
 extension HomeViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -79,6 +108,25 @@ extension HomeViewController: UICollectionViewDataSource {
         let medium = media[indexPath.item]
         cell.imageView.image = medium.image
         return cell
+    }
+
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        if kind == UICollectionView.elementKindSectionHeader {
+            if let header = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: SearchBarCollectionReusableView.identifier,
+                for: indexPath
+            ) as? SearchBarCollectionReusableView {
+                header.onSearch = { [weak self] text in
+                    MediumService.shared.search(query: text) { media in
+                        self?.media = media ?? []
+                        self?.collectionView.reloadData()
+                    }
+                }
+                return header
+            }
+        }
+        return UICollectionReusableView()
     }
 }
 

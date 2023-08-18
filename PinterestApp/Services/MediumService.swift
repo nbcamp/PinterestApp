@@ -44,5 +44,8 @@ final class MediumService {
         }
     }
 
-    func search() {}
+    func search(query: String, completion: @escaping ([Medium]?) -> Void) {
+        if query.isEmpty { return completion(media) }
+        completion(Array(media.shuffled().prefix(Int.random(in: 1 ... 20))))
+    }
 }

@@ -21,7 +21,7 @@ final class MediumService {
         var media: [Medium] = []
         let dispatchGroup = DispatchGroup()
         var rate = (progress: 0, completion: images.count)
-        images.enumerated().forEach { _, image in
+        images.forEach { image in
             dispatchGroup.enter()
             DispatchQueue.global().async {
                 guard let data = try? Data(contentsOf: URL(string: image.url)!),
@@ -31,8 +31,8 @@ final class MediumService {
                 dispatchGroup.leave()
 
                 DispatchQueue.main.async {
-                    progress(Double(rate.progress) / Double(rate.completion))
                     rate.progress += 1
+                    progress(Double(rate.progress) / Double(rate.completion))
                 }
             }
         }

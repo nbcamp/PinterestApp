@@ -13,7 +13,7 @@ final class ProfileViewController: UIViewController {
     private let plusButton = UIButton(type: .system)
 
     private var collectionView: UICollectionView!
-    let columns = 2
+    var columns = 2
 
     private var media: [Medium] { MediumService.shared.media }
 
@@ -49,7 +49,7 @@ extension ProfileViewController {
         editProfileButton.addTarget(self, action: #selector(editButtonTapped), for: .touchUpInside)
 
         subStackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .horizontal
+        subStackView.axis = .horizontal
 
         userCreatedLabel.translatesAutoresizingMaskIntoConstraints = false
         userCreatedLabel.textAlignment = .center
@@ -189,22 +189,31 @@ extension ProfileViewController {
     @objc
     private func gridButtonTapped() {
         switch currentGridType {
-        case .square3x3:
-            currentGridType = .square1x1
-            gridButton.setImage(UIImage(systemName: "square.fill"), for: .normal)
-        case .square1x1:
-            currentGridType = .square2x2
-            gridButton.setImage(UIImage(systemName: "square.grid.2x2.fill"), for: .normal)
-        case .square2x2:
-            currentGridType = .square3x3
-            gridButton.setImage(UIImage(systemName: "square.grid.3x3.fill"), for: .normal)
+            case .square3x3:
+                currentGridType = .square1x1
+                gridButton.setImage(UIImage(systemName: "square.fill"), for: .normal)
+                columns = 1
+            case .square1x1:
+                currentGridType = .square2x2
+                gridButton.setImage(UIImage(systemName: "square.grid.2x2.fill"), for: .normal)
+                columns = 2
+            case .square2x2:
+                currentGridType = .square3x3
+                gridButton.setImage(UIImage(systemName: "square.grid.3x3.fill"), for: .normal)
+                columns = 3
         }
 
-        reloadCurrentGridView()
+        updateCollectionViewLayout() // 리로드 안 됨
     }
 
-    private func reloadCurrentGridView() {
-        print("buttonTapped")
+    //
+    private func updateCollectionViewLayout() {
+        let layout = collectionView.collectionViewLayout as! PinterestCollectionViewFlowLayout
+        layout.numberOfColumns = columns
+        layout.invalidateLayout()
+
+        collectionView.reloadData()
+        print("CollectionView columns: \(columns)")
     }
 
     @objc

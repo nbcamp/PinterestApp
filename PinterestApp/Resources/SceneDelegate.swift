@@ -8,7 +8,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
         window?.makeKeyAndVisible()
 
-        let tabBarController = UITabBarController()
+        let tabBarController = TabBarController()
 
         let tabs: [(root: UIViewController, icon: String)] = [
             (HomeViewController(), "house"),

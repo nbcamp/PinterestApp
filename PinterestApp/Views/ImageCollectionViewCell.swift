@@ -1,7 +1,7 @@
 import UIKit
 
 final class ImageCollectionViewCell: UICollectionViewCell {
-    static let identifier = "ImageCollectionViewCell"
+    static let identifier = #function
 
     private(set) var imageView: UIImageView!
 

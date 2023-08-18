@@ -11,13 +11,12 @@
 		3076FAAE2A8D414500C47EC8 /* ProfileCustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3076FAAD2A8D414500C47EC8 /* ProfileCustomCell.swift */; };
 		3376307E2A8CA073003F30B2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3376307D2A8CA073003F30B2 /* AppDelegate.swift */; };
 		337630802A8CA073003F30B2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3376307F2A8CA073003F30B2 /* SceneDelegate.swift */; };
-		337630822A8CA073003F30B2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337630812A8CA073003F30B2 /* ViewController.swift */; };
+		337630822A8CA073003F30B2 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337630812A8CA073003F30B2 /* TabBarController.swift */; };
 		337630872A8CA074003F30B2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 337630862A8CA074003F30B2 /* Assets.xcassets */; };
 		3376308A2A8CA074003F30B2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 337630882A8CA074003F30B2 /* LaunchScreen.storyboard */; };
 		3376309F2A8CA2B2003F30B2 /* Medium.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3376309E2A8CA2B2003F30B2 /* Medium.swift */; };
 		337630A12A8CA331003F30B2 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337630A02A8CA331003F30B2 /* User.swift */; };
 		337630A42A8CA34C003F30B2 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337630A32A8CA34C003F30B2 /* AuthService.swift */; };
-		337630A82A8CA36E003F30B2 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337630A72A8CA36E003F30B2 /* Button.swift */; };
 		337630AB2A8CA395003F30B2 /* UIViewController+Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337630AA2A8CA395003F30B2 /* UIViewController+Preview.swift */; };
 		337630AF2A8CAE74003F30B2 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337630AE2A8CAE74003F30B2 /* HomeViewController.swift */; };
 		337630B12A8CAE7C003F30B2 /* NewPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337630B02A8CAE7C003F30B2 /* NewPostViewController.swift */; };
@@ -39,6 +38,7 @@
 		4ECA0A062A8DA147007C9077 /* CustomTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ECA09FE2A8DA147007C9077 /* CustomTextView.swift */; };
 		4ECA0A072A8DA147007C9077 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ECA09FF2A8DA147007C9077 /* CustomButton.swift */; };
 		4ECA0A092A8DA67C007C9077 /* EditPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ECA0A082A8DA67C007C9077 /* EditPostViewController.swift */; };
+		337631042A8F215B003F30B2 /* SearchBarCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337631032A8F215B003F30B2 /* SearchBarCollectionReusableView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,14 +47,13 @@
 		3376307A2A8CA073003F30B2 /* PinterestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PinterestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3376307D2A8CA073003F30B2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3376307F2A8CA073003F30B2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		337630812A8CA073003F30B2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		337630812A8CA073003F30B2 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		337630862A8CA074003F30B2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		337630892A8CA074003F30B2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3376308B2A8CA074003F30B2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3376309E2A8CA2B2003F30B2 /* Medium.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Medium.swift; sourceTree = "<group>"; };
 		337630A02A8CA331003F30B2 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		337630A32A8CA34C003F30B2 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
-		337630A72A8CA36E003F30B2 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		337630AA2A8CA395003F30B2 /* UIViewController+Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Preview.swift"; sourceTree = "<group>"; };
 		337630AE2A8CAE74003F30B2 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		337630B02A8CAE7C003F30B2 /* NewPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPostViewController.swift; sourceTree = "<group>"; };
@@ -76,6 +75,7 @@
 		4ECA09FE2A8DA147007C9077 /* CustomTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTextView.swift; sourceTree = "<group>"; };
 		4ECA09FF2A8DA147007C9077 /* CustomButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
 		4ECA0A082A8DA67C007C9077 /* EditPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPostViewController.swift; sourceTree = "<group>"; };
+		337631032A8F215B003F30B2 /* SearchBarCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarCollectionReusableView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,7 +153,7 @@
 		337630A52A8CA353003F30B2 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				337630812A8CA073003F30B2 /* ViewController.swift */,
+				337630812A8CA073003F30B2 /* TabBarController.swift */,
 				337630AE2A8CAE74003F30B2 /* HomeViewController.swift */,
 				337630B02A8CAE7C003F30B2 /* NewPostViewController.swift */,
 				4ECA0A082A8DA67C007C9077 /* EditPostViewController.swift */,
@@ -168,10 +168,10 @@
 			isa = PBXGroup;
 			children = (
 				337630882A8CA074003F30B2 /* LaunchScreen.storyboard */,
-				337630A72A8CA36E003F30B2 /* Button.swift */,
 				3076FAAB2A8D411F00C47EC8 /* ProfileView.swift */,
 				3076FAAD2A8D414500C47EC8 /* ProfileCustomCell.swift */,
 				337630F62A8DCE68003F30B2 /* ImageCollectionViewCell.swift */,
+				337631032A8F215B003F30B2 /* SearchBarCollectionReusableView.swift */,
 				337630F82A8DEE00003F30B2 /* PinterestCollectionViewFlowLayout.swift */,
 				4ECA09FD2A8DA146007C9077 /* ContentView.swift */,
 				4ECA09FF2A8DA147007C9077 /* CustomButton.swift */,
@@ -266,8 +266,8 @@
 			files = (
 				337630AF2A8CAE74003F30B2 /* HomeViewController.swift in Sources */,
 				4ECA0A042A8DA147007C9077 /* CustomImageView.swift in Sources */,
-				337630A82A8CA36E003F30B2 /* Button.swift in Sources */,
-				337630822A8CA073003F30B2 /* ViewController.swift in Sources */,
+				337631042A8F215B003F30B2 /* SearchBarCollectionReusableView.swift in Sources */,
+				337630822A8CA073003F30B2 /* TabBarController.swift in Sources */,
 				4ECA0A012A8DA147007C9077 /* CustomUIBarButtonItem.swift in Sources */,
 				4ECA0A002A8DA147007C9077 /* CustomLabel.swift in Sources */,
 				4ECA0A062A8DA147007C9077 /* CustomTextView.swift in Sources */,

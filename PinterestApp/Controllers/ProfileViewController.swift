@@ -12,15 +12,10 @@ final class ProfileViewController: UIViewController {
     private let gridButton = UIButton(type: .system)
     private let plusButton = UIButton(type: .system)
 
-    var myCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    private var collectionView: UICollectionView!
+    let columns = 2
 
-    private let images: [UIImage] = [
-        UIImage(named: "1")!,
-        UIImage(named: "2")!,
-        UIImage(named: "3")!,
-        UIImage(named: "4")!,
-        UIImage(named: "5")!
-    ]
+    private var media: [Medium] { MediumService.shared.media }
 
     private var currentGridType: GridType = .square2x2
 
@@ -28,9 +23,6 @@ final class ProfileViewController: UIViewController {
         super.viewDidLoad()
         setupStyle()
         setupLayout()
-
-        myCollectionView.dataSource = self
-        myCollectionView.delegate = self
     }
 
     override func viewDidLayoutSubviews() {
@@ -74,11 +66,18 @@ extension ProfileViewController {
         plusButton.setImage(UIImage(systemName: "plus"), for: .normal)
         plusButton.tintColor = .darkText
         plusButton.addTarget(self, action: #selector(plusButtonTapped), for: .touchUpInside)
-        
-        //
-        myCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        myCollectionView.register(ImageCollectionViewCell.self,
-                                  forCellWithReuseIdentifier: ImageCollectionViewCell.identifier)
+
+        let layout = PinterestCollectionViewFlowLayout()
+        layout.numberOfColumns = columns
+        layout.delegate = self
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.register(
+            ImageCollectionViewCell.self,
+            forCellWithReuseIdentifier: ImageCollectionViewCell.identifier
+        )
     }
 
     private func setupLayout() {
@@ -93,7 +92,7 @@ extension ProfileViewController {
         subStackView.addSubview(userCreatedLabel)
         subStackView.addSubview(gridButton)
         subStackView.addSubview(plusButton)
-        subStackView.addSubview(myCollectionView)
+        subStackView.addSubview(collectionView)
 
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -135,14 +134,45 @@ extension ProfileViewController {
             plusButton.trailingAnchor.constraint(equalTo: subStackView.trailingAnchor, constant: -22),
             plusButton.heightAnchor.constraint(equalTo: userCreatedLabel.heightAnchor),
             plusButton.widthAnchor.constraint(equalTo: plusButton.heightAnchor),
-            
-            //
-            myCollectionView.topAnchor.constraint(equalToSystemSpacingBelow: userCreatedLabel.bottomAnchor, multiplier: 1),
-            myCollectionView.leadingAnchor.constraint(equalTo: subStackView.leadingAnchor, constant: 10),
-            myCollectionView.trailingAnchor.constraint(equalTo: subStackView.trailingAnchor, constant: -10),
-            myCollectionView.bottomAnchor.constraint(equalTo: subStackView.bottomAnchor),
-            myCollectionView.heightAnchor.constraint(equalTo: myCollectionView.widthAnchor, multiplier: CGFloat(images.count))
+
+            collectionView.topAnchor.constraint(equalToSystemSpacingBelow: userCreatedLabel.bottomAnchor, multiplier: 1),
+            collectionView.leadingAnchor.constraint(equalTo: subStackView.leadingAnchor, constant: 10),
+            collectionView.trailingAnchor.constraint(equalTo: subStackView.trailingAnchor, constant: -10),
+            collectionView.bottomAnchor.constraint(equalTo: subStackView.bottomAnchor),
+            collectionView.heightAnchor.constraint(equalToConstant: 2000),
         ])
+    }
+}
+
+extension ProfileViewController: UICollectionViewDelegate {}
+
+extension ProfileViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return media.count
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCollectionViewCell.identifier, for: indexPath) as? ImageCollectionViewCell else {
+            return UICollectionViewCell()
+        }
+
+        let medium = media[indexPath.item]
+        cell.imageView.image = medium.image
+        return cell
+    }
+}
+
+extension ProfileViewController: PinterestCollectionViewDelegateFlowLayout {
+    var contentPadding: CGFloat { 10.0 }
+
+    func collectionView(_ collectionView: UICollectionView, layout: UICollectionViewLayout, contentHeightAt indexPath: IndexPath) -> CGFloat {
+        let image = media[indexPath.item]
+        let width = (collectionView.bounds.width - (CGFloat(columns + 1) * contentPadding)) / CGFloat(columns)
+        return width * (Double(image.height) / Double(image.width))
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout: UICollectionViewLayout, contentPaddingForSectionAt section: Int) -> CGFloat {
+        return contentPadding
     }
 }
 
@@ -180,25 +210,5 @@ extension ProfileViewController {
     @objc
     private func plusButtonTapped() {
         navigationController?.pushViewController(NewPostViewController(), animated: true)
-    }
-}
-
-//
-extension ProfileViewController: UICollectionViewDelegate {}
-
-extension ProfileViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
-    }
-
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCollectionViewCell.identifier, for: indexPath) as? ImageCollectionViewCell else {
-            fatalError("The CollectionView could not dequeue a CustomCell in ViewController.")
-        }
-
-        let image = images[indexPath.item]
-        cell.imageView.image = image
-
-        return cell
     }
 }

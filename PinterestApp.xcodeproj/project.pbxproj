@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3076FAAC2A8D411F00C47EC8 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3076FAAB2A8D411F00C47EC8 /* ProfileView.swift */; };
-		3076FAAE2A8D414500C47EC8 /* ProfileCustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3076FAAD2A8D414500C47EC8 /* ProfileCustomCell.swift */; };
+		3076FAFB2A8FA8F000C47EC8 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3076FAFA2A8FA8F000C47EC8 /* ProfileView.swift */; };
 		3376307E2A8CA073003F30B2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3376307D2A8CA073003F30B2 /* AppDelegate.swift */; };
 		337630802A8CA073003F30B2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3376307F2A8CA073003F30B2 /* SceneDelegate.swift */; };
 		337630822A8CA073003F30B2 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337630812A8CA073003F30B2 /* TabBarController.swift */; };
@@ -42,8 +41,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		3076FAAB2A8D411F00C47EC8 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
-		3076FAAD2A8D414500C47EC8 /* ProfileCustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCustomCell.swift; sourceTree = "<group>"; };
+		3076FAFA2A8FA8F000C47EC8 /* ProfileView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		3376307A2A8CA073003F30B2 /* PinterestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PinterestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3376307D2A8CA073003F30B2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3376307F2A8CA073003F30B2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -288,10 +286,9 @@
 				337630FC2A8E32C5003F30B2 /* MediumService.swift in Sources */,
 				337630B12A8CAE7C003F30B2 /* NewPostViewController.swift in Sources */,
 				337630EF2A8CD73D003F30B2 /* DetailPostViewController.swift in Sources */,
-				3076FAAC2A8D411F00C47EC8 /* ProfileView.swift in Sources */,
 				337630F92A8DEE00003F30B2 /* PinterestCollectionViewFlowLayout.swift in Sources */,
+				3076FAFB2A8FA8F000C47EC8 /* ProfileView.swift in Sources */,
 				337630802A8CA073003F30B2 /* SceneDelegate.swift in Sources */,
-				3076FAAE2A8D414500C47EC8 /* ProfileCustomCell.swift in Sources */,
 				337630F52A8DB67F003F30B2 /* Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

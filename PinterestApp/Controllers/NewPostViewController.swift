@@ -1,34 +1,56 @@
 import UIKit
 
 final class NewPostViewController: UIViewController {
+    let picker = UIImagePickerController()
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        initializeUI()
-    }
-
-    private func initializeUI() {
         view.backgroundColor = .systemBackground
-
-        let button = {
-            let button = UIButton()
-            button.setTitle("New Post View : Button", for: .normal)
-            button.setTitleColor(.systemBlue, for: .normal)
-            button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
-            button.translatesAutoresizingMaskIntoConstraints = false
-            return button
-        }()
-
-        view.addSubview(button)
-
-        let layout = view.safeAreaLayoutGuide
-        NSLayoutConstraint.activate([
-            button.centerXAnchor.constraint(equalTo: layout.centerXAnchor),
-            button.centerYAnchor.constraint(equalTo: layout.centerYAnchor),
-        ])
+        picker.delegate = self
+        settingPicker()
     }
 
-    @objc
-    private func buttonTapped() {
-        print("화면 전환 테스트 코드가 필요하다면 여기 작성하세요.")
+    func settingPicker() {
+        picker.sourceType = .photoLibrary
+        picker.allowsEditing = true
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        openLibrary()
+    }
+
+    func openLibrary() {
+        picker.sourceType = .photoLibrary
+        picker.modalPresentationStyle = .fullScreen
+        present(picker, animated: true)
     }
 }
+
+// 2번째 페이지로 이미지를 전달할 프로토콜
+extension NewPostViewController: EditPostViewControllerDelegate {
+    func sendImage(_ imageString: UIImage) -> UIImage {
+        return imageString
+    }
+}
+
+extension NewPostViewController: UIImagePickerControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+        let vc = EditPostViewController()
+        vc.delegate = self
+
+        if let possibleImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+            vc.galleryImage = possibleImage // 수정된 이미지가 있을 경우
+        } else if let possibleImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            vc.galleryImage = possibleImage // 원본 이미지가 있을 경우
+        }
+        navigationController?.pushViewController(vc, animated: true)
+        picker.dismiss(animated: true, completion: nil) // picker를 닫아줌
+    }
+
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
+        tabBarController?.selectedIndex = 0
+    }
+}
+
+extension NewPostViewController: UINavigationControllerDelegate {}

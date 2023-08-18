@@ -29,6 +29,7 @@ class EditPostViewController: UIViewController {
     weak var delegate: EditPostViewControllerDelegate?
 
     let textViewPlaceHolder = "내용을 입력하세요."
+    var textViewYValue = CGFloat(0)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,6 +50,7 @@ class EditPostViewController: UIViewController {
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         customTextField.becomeFirstResponder()
+        customDetailTextView.becomeFirstResponder()
     }
 
     @objc func customBackbuttonAction(_ sender: UIBarButtonItem) {
@@ -163,7 +165,7 @@ class EditPostViewController: UIViewController {
             customDetailTextView.topAnchor.constraint(equalTo: customDetailLabel.bottomAnchor, constant: 0),
             customDetailTextView.bottomAnchor.constraint(equalTo: customScrollView.bottomAnchor, constant: -10),
             customDetailTextView.leadingAnchor.constraint(equalTo: customScrollView.leadingAnchor, constant: 40),
-            customDetailTextView.heightAnchor.constraint(equalToConstant: 1000),
+            customDetailTextView.heightAnchor.constraint(equalToConstant: 300),
         ])
     }
 }
@@ -182,10 +184,6 @@ extension EditPostViewController: UITextFieldDelegate {
 
 extension EditPostViewController: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        if text == "\n" {
-            customDetailTextView.resignFirstResponder()
-        } else {}
-
         let inputString = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard let oldString = textView.text, let newRange = Range(range, in: oldString) else { return true }
         let newString = oldString.replacingCharacters(in: newRange, with: inputString).trimmingCharacters(in: .whitespacesAndNewlines)
@@ -208,6 +206,11 @@ extension EditPostViewController: UITextViewDelegate {
             customDetailTextView.text = textViewPlaceHolder
             customDetailTextView.textColor = .lightGray
         }
+    }
+
+    func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
+        customDetailTextView.resignFirstResponder()
+        return true
     }
 }
 
@@ -258,25 +261,47 @@ extension EditPostViewController {
     }
 
     @objc func keyboardWillShow(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            if customContentView.frame.origin.y == 0 {
-//                customContentView.frame.origin.y -= keyboardSize.height + UIApplication.shared.windows.first!.safeAreaInsets.bottom
-                customContentView.frame.origin.y -= keyboardSize.height / 2 + UIApplication.shared.windows.first!.safeAreaInsets.bottom
+        customScrollView.isScrollEnabled = false
+        if customTextField.isFirstResponder {
+            if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+                if customContentView.frame.origin.y == textViewYValue {
+                    customContentView.frame.origin.y -= keyboardSize.height / 3 - UIApplication.shared.windows.first!.safeAreaInsets.bottom
+                }
+            }
+        } else if customDetailTextView.isFirstResponder {
+            if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+                if customContentView.frame.origin.y == textViewYValue {
+                    customContentView.frame.origin.y -= keyboardSize.height * 1.2 - UIApplication.shared.windows.first!.safeAreaInsets.bottom
+                }
             }
         }
     }
 
     @objc func keyboardDidShow(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            if customContentView.frame.origin.y == 0 {
-                customContentView.frame.origin.y -= keyboardSize.height - UIApplication.shared.windows.first!.safeAreaInsets.bottom
+        customScrollView.isScrollEnabled = false
+        if customTextField.isFirstResponder {
+            customDetailTextView.isEditable = false
+            if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+                if customContentView.frame.origin.y == textViewYValue {
+                    customContentView.frame.origin.y -= keyboardSize.height / 3 - UIApplication.shared.windows.first!.safeAreaInsets.bottom
+                }
+            }
+        } else if customDetailTextView.isFirstResponder {
+            customTextField.isEnabled = false
+            if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+                if customContentView.frame.origin.y == textViewYValue {
+                    customDetailTextView.frame.origin.y -= keyboardSize.height * 1.2 - UIApplication.shared.windows.first!.safeAreaInsets.bottom
+                }
             }
         }
     }
 
     @objc func keyboardWillHide(notification: NSNotification) {
-        if customContentView.frame.origin.y != 0 {
-            customContentView.frame.origin.y = 0
+        if customContentView.frame.origin.y != textViewYValue {
+            customContentView.frame.origin.y = textViewYValue
+            customScrollView.isScrollEnabled = true
+            customDetailTextView.isEditable = true
+            customTextField.isEnabled = true
         }
     }
 }

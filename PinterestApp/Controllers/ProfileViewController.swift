@@ -11,15 +11,8 @@ final class ProfileViewController: UIViewController {
     private let userCreatedLabel = UILabel()
     private let gridButton = UIButton(type: .system)
     private let plusButton = UIButton(type: .system)
-    
-    // 콜렉션뷰로 변경 예정...
-    private let tableView: UITableView = {
-        let tableView = UITableView()
-        tableView.allowsSelection = true
-        tableView.register(ProfileCustomCell.self, forCellReuseIdentifier: ProfileCustomCell.identifier)
 
-        return tableView
-    }()
+    var myCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
 
     private let images: [UIImage] = [
         UIImage(named: "1")!,
@@ -29,14 +22,15 @@ final class ProfileViewController: UIViewController {
         UIImage(named: "5")!
     ]
 
+    private var currentGridType: GridType = .square2x2
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
         setupStyle()
         setupLayout()
 
-        tableView.dataSource = self
-        tableView.delegate = self
+        myCollectionView.dataSource = self
+        myCollectionView.delegate = self
     }
 
     override func viewDidLayoutSubviews() {
@@ -80,9 +74,11 @@ extension ProfileViewController {
         plusButton.setImage(UIImage(systemName: "plus"), for: .normal)
         plusButton.tintColor = .darkText
         plusButton.addTarget(self, action: #selector(plusButtonTapped), for: .touchUpInside)
-
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.register(ProfileCustomCell.self, forCellReuseIdentifier: ProfileCustomCell.identifier)
+        
+        //
+        myCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        myCollectionView.register(ImageCollectionViewCell.self,
+                                  forCellWithReuseIdentifier: ImageCollectionViewCell.identifier)
     }
 
     private func setupLayout() {
@@ -93,11 +89,11 @@ extension ProfileViewController {
         stackView.addSubview(profileView)
         stackView.addSubview(editProfileButton)
         stackView.addSubview(subStackView)
-        stackView.addSubview(tableView)
 
         subStackView.addSubview(userCreatedLabel)
         subStackView.addSubview(gridButton)
         subStackView.addSubview(plusButton)
+        subStackView.addSubview(myCollectionView)
 
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -139,12 +135,13 @@ extension ProfileViewController {
             plusButton.trailingAnchor.constraint(equalTo: subStackView.trailingAnchor, constant: -22),
             plusButton.heightAnchor.constraint(equalTo: userCreatedLabel.heightAnchor),
             plusButton.widthAnchor.constraint(equalTo: plusButton.heightAnchor),
-
-            tableView.topAnchor.constraint(equalToSystemSpacingBelow: userCreatedLabel.bottomAnchor, multiplier: 1),
-            tableView.leadingAnchor.constraint(equalTo: subStackView.leadingAnchor, constant: 10),
-            tableView.trailingAnchor.constraint(equalTo: subStackView.trailingAnchor, constant: -10),
-            tableView.bottomAnchor.constraint(equalTo: subStackView.bottomAnchor),
-            tableView.heightAnchor.constraint(equalTo: tableView.widthAnchor, multiplier: CGFloat(images.count))
+            
+            //
+            myCollectionView.topAnchor.constraint(equalToSystemSpacingBelow: userCreatedLabel.bottomAnchor, multiplier: 1),
+            myCollectionView.leadingAnchor.constraint(equalTo: subStackView.leadingAnchor, constant: 10),
+            myCollectionView.trailingAnchor.constraint(equalTo: subStackView.trailingAnchor, constant: -10),
+            myCollectionView.bottomAnchor.constraint(equalTo: subStackView.bottomAnchor),
+            myCollectionView.heightAnchor.constraint(equalTo: myCollectionView.widthAnchor, multiplier: CGFloat(images.count))
         ])
     }
 }
@@ -155,9 +152,29 @@ extension ProfileViewController {
         navigationController?.pushViewController(EditProfileViewController(), animated: true)
     }
 
+    private enum GridType {
+        case square3x3, square1x1, square2x2
+    }
+
     @objc
     private func gridButtonTapped() {
-        print("girdButton Tapped!")
+        switch currentGridType {
+        case .square3x3:
+            currentGridType = .square1x1
+            gridButton.setImage(UIImage(systemName: "square.fill"), for: .normal)
+        case .square1x1:
+            currentGridType = .square2x2
+            gridButton.setImage(UIImage(systemName: "square.grid.2x2.fill"), for: .normal)
+        case .square2x2:
+            currentGridType = .square3x3
+            gridButton.setImage(UIImage(systemName: "square.grid.3x3.fill"), for: .normal)
+        }
+
+        reloadCurrentGridView()
+    }
+
+    private func reloadCurrentGridView() {
+        print("buttonTapped")
     }
 
     @objc
@@ -166,27 +183,21 @@ extension ProfileViewController {
     }
 }
 
-extension ProfileViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let cellSpacing: CGFloat = 5
-        let screenWidth = tableView.bounds.width
-        let cellHeight = screenWidth * 0.9
-        return cellHeight + cellSpacing
-    }
-}
+//
+extension ProfileViewController: UICollectionViewDelegate {}
 
-extension ProfileViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return images.count
+extension ProfileViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 5
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileCustomCell.identifier, for: indexPath) as? ProfileCustomCell else {
-            fatalError("The TableView could not dequeue a CustomCell in ViewController.")
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCollectionViewCell.identifier, for: indexPath) as? ImageCollectionViewCell else {
+            fatalError("The CollectionView could not dequeue a CustomCell in ViewController.")
         }
 
-        let image = images[indexPath.row]
-        cell.configure(with: image)
+        let image = images[indexPath.item]
+        cell.imageView.image = image
 
         return cell
     }

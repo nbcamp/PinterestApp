@@ -26,7 +26,7 @@ extension ProfileView {
 
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
-        stackView.spacing = 1
+        stackView.spacing = 2
 
         userImage.translatesAutoresizingMaskIntoConstraints = false
         userImage.backgroundColor = .white

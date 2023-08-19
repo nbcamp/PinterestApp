@@ -10,7 +10,7 @@ final class EditProfileViewController: UIViewController {
         return scrollView
     }()
     
-    let contentView: UIStackView = { // stackView로 변경
+    let contentView: UIStackView = {
         let contentView = UIStackView()
         contentView.axis = .vertical
         contentView.spacing = 20
@@ -63,7 +63,6 @@ final class EditProfileViewController: UIViewController {
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.placeholder = "name"
         textField.font = UIFont.systemFont(ofSize: 19)
-        // textField.borderStyle = .none
         textField.layer.borderColor = UIColor.lightGray.cgColor
         textField.layer.borderWidth = 1.0
         textField.layer.cornerRadius = 13.0
@@ -259,42 +258,6 @@ final class EditProfileViewController: UIViewController {
             introduceTextView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -50.0),
             introduceTextView.heightAnchor.constraint(equalToConstant: 220.0),
             
-            /*
-                // 프로필 이미지뷰
-                imageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-                imageView.widthAnchor.constraint(equalToConstant: 150),
-                imageView.heightAnchor.constraint(equalToConstant: 150),
-                imageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 40.0),
-            
-                // 프로필 사진 변경 버튼
-                changeButton.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 14.0),
-                changeButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            
-                // name 라벨
-                nameLabel.topAnchor.constraint(equalTo: changeButton.bottomAnchor, constant: 15.0),
-                nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 35.0),
-                nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -30.0),
-                nameLabel.heightAnchor.constraint(equalToConstant: 25.0),
-            
-                // name 텍스트 필드
-                nameTextField.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 12.0),
-                nameTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 30.0),
-                nameTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -30.0),
-                nameTextField.heightAnchor.constraint(equalToConstant: 40.0),
-        
-                // introduce 라벨
-                introduceLabel.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 30.0),
-                introduceLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 35.0),
-                introduceLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -30.0),
-                introduceLabel.heightAnchor.constraint(equalToConstant: 20.0),
-            
-                // introduce 텍스트 뷰
-                introduceTextView.topAnchor.constraint(equalTo: introduceLabel.bottomAnchor, constant: 12.0),
-                introduceTextView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 30.0),
-                introduceTextView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -30.0),
-                introduceTextView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -50.0),
-                introduceTextView.heightAnchor.constraint(equalToConstant: 220.0),
-                */
         ])
     }
 }

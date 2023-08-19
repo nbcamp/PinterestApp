@@ -108,6 +108,9 @@ final class EditProfileViewController: UIViewController {
         setUpImagePickerController()
         setUpViews()
         setUpConstraints()
+        
+        nameTextField.delegate = self
+        introduceTextView.delegate = self
     }
 
     private func addNavButtons() {
@@ -198,8 +201,17 @@ final class EditProfileViewController: UIViewController {
         self.loadingView = nil
     }
     
-    // private func regist
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        nameTextField.becomeFirstResponder()
+        introduceTextView.becomeFirstResponder()
+    }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        hideKeyboardTappedAround()
+    }
+
     // 레이아웃
     private func setUpConstraints() {
         let safeArea = view.safeAreaLayoutGuide
@@ -323,3 +335,42 @@ extension EditProfileViewController: UITextViewDelegate {
         }
     }
 }
+
+extension EditProfileViewController {
+    func hideKeyboardTappedAround() {
+        let tap = UIGestureRecognizer(target: self, action: #selector(EditProfileViewController
+                .dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if text == "\n" {
+            textView.resignFirstResponder()
+            return false
+        }
+        return true
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if string == "\n" {
+            textField.resignFirstResponder()
+            return false
+        }
+        return true
+    }
+}
+
+extension EditProfileViewController: UITextFieldDelegate {
+    func textFieldReturn(_ textField: UITextField) -> Bool {
+        nameTextField.resignFirstResponder()
+        introduceTextView.resignFirstResponder()
+        dismiss(animated: true, completion: nil)
+        return true
+    }
+}
+ 

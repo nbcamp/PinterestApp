@@ -4,7 +4,10 @@ final class ProfileViewController: UIViewController {
     private let scrollView = UIScrollView()
     private let stackView = UIStackView()
 
-    let profileView = ProfileView()
+    let userImage = UIImageView(image: UIImage(named: "5"))
+    let userNameLabel = UILabel()
+    let userDetail = UILabel()
+
     let editProfileButton = UIButton(type: .system)
 
     private let subStackView = UIStackView()
@@ -13,6 +16,7 @@ final class ProfileViewController: UIViewController {
     private let plusButton = UIButton(type: .system)
 
     private var collectionView: UICollectionView!
+
     var columns = 2
 
     private var media: [Medium] { MediumService.shared.media }
@@ -39,7 +43,28 @@ extension ProfileViewController {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
 
-        profileView.translatesAutoresizingMaskIntoConstraints = false
+        userImage.translatesAutoresizingMaskIntoConstraints = false
+        userImage.backgroundColor = .systemGray
+        userImage.contentMode = .scaleAspectFill
+        userImage.clipsToBounds = true
+        userImage.layer.cornerRadius = 75
+        userImage.layer.shadowOffset = CGSize(width: 5, height: 5)
+        userImage.layer.shadowOpacity = 0.7
+        userImage.layer.shadowRadius = 5
+        userImage.layer.shadowColor = UIColor.gray.cgColor
+
+        userNameLabel.translatesAutoresizingMaskIntoConstraints = false
+        userNameLabel.textAlignment = .center
+        userNameLabel.font = UIFont.preferredFont(forTextStyle: .largeTitle).withSize(48)
+        userNameLabel.adjustsFontForContentSizeCategory = true
+        userNameLabel.text = "Sixteen"
+
+        userDetail.translatesAutoresizingMaskIntoConstraints = false
+        userDetail.textAlignment = .center
+        userDetail.font = UIFont.preferredFont(forTextStyle: .caption2).withSize(16)
+        userDetail.adjustsFontForContentSizeCategory = true
+        userDetail.numberOfLines = 0
+        userDetail.text = "@user 🌿 Welcome!!"
 
         editProfileButton.translatesAutoresizingMaskIntoConstraints = false
         editProfileButton.backgroundColor = .systemGray
@@ -85,14 +110,15 @@ extension ProfileViewController {
 
         scrollView.addSubview(stackView)
 
-        stackView.addSubview(profileView)
+        stackView.addSubview(userImage)
+        stackView.addSubview(userNameLabel)
+        stackView.addSubview(userDetail)
         stackView.addSubview(editProfileButton)
         stackView.addSubview(subStackView)
-
         subStackView.addSubview(userCreatedLabel)
         subStackView.addSubview(gridButton)
         subStackView.addSubview(plusButton)
-        subStackView.addSubview(collectionView)
+        stackView.addSubview(collectionView)
 
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -106,12 +132,19 @@ extension ProfileViewController {
             stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
 
-            profileView.topAnchor.constraint(equalTo: stackView.topAnchor),
-            profileView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
-            profileView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
-            profileView.heightAnchor.constraint(equalToConstant: 220),
+            userImage.topAnchor.constraint(equalToSystemSpacingBelow: stackView.topAnchor, multiplier: 3),
+            userImage.centerXAnchor.constraint(equalTo: stackView.centerXAnchor),
+            userImage.widthAnchor.constraint(equalToConstant: 150),
+            userImage.heightAnchor.constraint(equalToConstant: 150),
 
-            editProfileButton.topAnchor.constraint(equalToSystemSpacingBelow: profileView.bottomAnchor, multiplier: 3),
+            userNameLabel.topAnchor.constraint(equalToSystemSpacingBelow: userImage.bottomAnchor, multiplier: 1.5),
+            userNameLabel.centerXAnchor.constraint(equalTo: stackView.centerXAnchor),
+
+            userDetail.topAnchor.constraint(equalToSystemSpacingBelow: userNameLabel.bottomAnchor, multiplier: 1.5),
+            userDetail.centerXAnchor.constraint(equalTo: stackView.centerXAnchor),
+            userDetail.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 0.6),
+
+            editProfileButton.topAnchor.constraint(equalToSystemSpacingBelow: userDetail.bottomAnchor, multiplier: 1.5),
             editProfileButton.centerXAnchor.constraint(equalTo: stackView.centerXAnchor),
             editProfileButton.widthAnchor.constraint(equalTo: editProfileButton.titleLabel!.widthAnchor, constant: 16),
 
@@ -135,11 +168,11 @@ extension ProfileViewController {
             plusButton.heightAnchor.constraint(equalTo: userCreatedLabel.heightAnchor),
             plusButton.widthAnchor.constraint(equalTo: plusButton.heightAnchor),
 
-            collectionView.topAnchor.constraint(equalToSystemSpacingBelow: userCreatedLabel.bottomAnchor, multiplier: 1),
-            collectionView.leadingAnchor.constraint(equalTo: subStackView.leadingAnchor, constant: 10),
-            collectionView.trailingAnchor.constraint(equalTo: subStackView.trailingAnchor, constant: -10),
-            collectionView.bottomAnchor.constraint(equalTo: subStackView.bottomAnchor),
-            collectionView.heightAnchor.constraint(equalToConstant: 2000),
+            collectionView.topAnchor.constraint(equalToSystemSpacingBelow: plusButton.bottomAnchor, multiplier: 1),
+            collectionView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 10),
+            collectionView.trailingAnchor.constraint(equalTo: stackView.safeAreaLayoutGuide.trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: stackView.bottomAnchor, constant: -10),
+            collectionView.heightAnchor.constraint(equalTo: collectionView.widthAnchor, multiplier: 3),
         ])
     }
 }
@@ -203,10 +236,9 @@ extension ProfileViewController {
                 columns = 3
         }
 
-        updateCollectionViewLayout() // 리로드 안 됨
+        updateCollectionViewLayout()
     }
 
-    //
     private func updateCollectionViewLayout() {
         let layout = collectionView.collectionViewLayout as! PinterestCollectionViewFlowLayout
         layout.numberOfColumns = columns

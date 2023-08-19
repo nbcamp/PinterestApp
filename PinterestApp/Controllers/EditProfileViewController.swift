@@ -2,7 +2,7 @@ import UIKit
 
 final class EditProfileViewController: UIViewController {
     private var loadingView: UIView?
-    
+   
     let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -110,6 +110,9 @@ final class EditProfileViewController: UIViewController {
         
         nameTextField.delegate = self
         introduceTextView.delegate = self
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
 
     private func addNavButtons() {
@@ -210,14 +213,32 @@ final class EditProfileViewController: UIViewController {
         
         hideKeyboardTappedAround()
     }
+    
+    @objc private func keyboardWillShow(notification: NSNotification) {
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardRectangle = keyboardFrame.cgRectValue
+            let keyboardHeight = keyboardRectangle.height
+            
+            let desiredKeyboardHeight: CGFloat = keyboardHeight
+            let contentInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: desiredKeyboardHeight, right: 0.0)
+            scrollView.contentInset = contentInsets
+            scrollView.scrollIndicatorInsets = contentInsets
+        }
+    }
+
+    @objc private func keyboardWillHide(notification: NSNotification) {
+        let contentInsets = UIEdgeInsets.zero
+        scrollView.contentInset = contentInsets
+        scrollView.scrollIndicatorInsets = contentInsets
+    }
 
     // 레이아웃
     private func setUpConstraints() {
         let safeArea = view.safeAreaLayoutGuide
         imageView.leadingAnchor.constraint(greaterThanOrEqualTo: contentView.leadingAnchor, constant: 100.0).isActive = true
         imageView.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -100.0).isActive = true
-        changeButton.leadingAnchor.constraint(greaterThanOrEqualTo: contentView.leadingAnchor, constant: 40.0).isActive = true
-        changeButton.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -40.0).isActive = true
+        changeButton.leadingAnchor.constraint(greaterThanOrEqualTo: contentView.leadingAnchor, constant: 30.0).isActive = true
+        changeButton.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -30.0).isActive = true
 
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: safeArea.topAnchor),
@@ -301,7 +322,7 @@ extension EditProfileViewController: UITextViewDelegate {
 
 extension EditProfileViewController {
     func hideKeyboardTappedAround() {
-        let tap = UIGestureRecognizer(target: self, action: #selector(EditProfileViewController
+        let tap = UITapGestureRecognizer(target: self, action: #selector(EditProfileViewController
                 .dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
@@ -336,4 +357,3 @@ extension EditProfileViewController: UITextFieldDelegate {
         return true
     }
 }
- 

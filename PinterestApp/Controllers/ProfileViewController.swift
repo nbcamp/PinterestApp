@@ -47,6 +47,8 @@ extension ProfileViewController {
         userImage.backgroundColor = .systemGray
         userImage.contentMode = .scaleAspectFill
         userImage.clipsToBounds = true
+        userImage.layer.borderWidth = 2.0
+        userImage.layer.borderColor = UIColor.white.cgColor
         userImage.layer.cornerRadius = 75
         userImage.layer.shadowOffset = CGSize(width: 5, height: 5)
         userImage.layer.shadowOpacity = 0.7
@@ -67,10 +69,12 @@ extension ProfileViewController {
         userDetail.text = "@user 🌿 Welcome!!"
 
         editProfileButton.translatesAutoresizingMaskIntoConstraints = false
-        editProfileButton.backgroundColor = .systemGray
-        editProfileButton.setTitle("Edit", for: .normal)
+        editProfileButton.backgroundColor = .white
+        editProfileButton.setTitle("변경", for: .normal)
         editProfileButton.setTitleColor(.darkText, for: .normal)
         editProfileButton.layer.cornerRadius = 5
+        editProfileButton.layer.borderWidth = 1.0
+        editProfileButton.layer.borderColor = UIColor.systemGray.cgColor
         editProfileButton.addTarget(self, action: #selector(editButtonTapped), for: .touchUpInside)
 
         subStackView.translatesAutoresizingMaskIntoConstraints = false
@@ -80,16 +84,16 @@ extension ProfileViewController {
         userCreatedLabel.textAlignment = .center
         userCreatedLabel.font = UIFont.preferredFont(forTextStyle: .headline)
         userCreatedLabel.adjustsFontForContentSizeCategory = true
-        userCreatedLabel.text = "Created"
+        userCreatedLabel.text = "My Posting"
 
         gridButton.translatesAutoresizingMaskIntoConstraints = false
         gridButton.setImage(UIImage(systemName: "square.grid.2x2.fill"), for: .normal)
-        gridButton.tintColor = .darkText
+        gridButton.tintColor = .label
         gridButton.addTarget(self, action: #selector(gridButtonTapped), for: .touchUpInside)
 
         plusButton.translatesAutoresizingMaskIntoConstraints = false
         plusButton.setImage(UIImage(systemName: "plus"), for: .normal)
-        plusButton.tintColor = .darkText
+        plusButton.tintColor = .label
         plusButton.addTarget(self, action: #selector(plusButtonTapped), for: .touchUpInside)
 
         let layout = PinterestCollectionViewFlowLayout()
@@ -245,7 +249,6 @@ extension ProfileViewController {
         layout.invalidateLayout()
 
         collectionView.reloadData()
-        print("CollectionView columns: \(columns)")
     }
 
     @objc

@@ -11,7 +11,6 @@ final class CustomUIBarButtonItem: UIBarButtonItem {
     override init() {
         super.init()
         self.title = "Done"
-        self.image
         self.style = .plain
         self.target = self
         self.action = nil

@@ -8,7 +8,7 @@
 import UIKit
 
 // 이미지 뷰 클릭시 수정 페이지로 이동시키기
-protocol EditPostViewControllerDelegate: class {
+protocol EditPostViewControllerDelegate: AnyObject {
     func sendImage(_ imageString: UIImage) -> UIImage
 }
 

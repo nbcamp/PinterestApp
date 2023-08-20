@@ -38,7 +38,7 @@ final class EditProfileViewController: UIViewController {
     
     lazy var imagePickerController = UIImagePickerController()
     
-    let changeButton: UIButton = {
+    lazy var changeButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Change", for: .normal)

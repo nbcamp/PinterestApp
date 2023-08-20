@@ -7,7 +7,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
         window?.makeKeyAndVisible()
-
+        
+        AuthService.shared.login()
         let tabBarController = TabBarController()
 
         let tabs: [(root: UIViewController, icon: String)] = [

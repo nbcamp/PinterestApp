@@ -1,6 +1,13 @@
 import UIKit
 
+protocol EditProfileViewControllerDelegate: AnyObject {
+    func userProfileDidEdit(user: User)
+}
+
 final class EditProfileViewController: UIViewController {
+    var authUser: User?
+    weak var delegate: EditProfileViewControllerDelegate?
+    
     private var loadingView: UIView?
     
     private let namePlaceholder = "이름을 작성해주세요."
@@ -22,17 +29,17 @@ final class EditProfileViewController: UIViewController {
         return contentView
     }()
 
-    private let imageView: UIImageView = {
+    private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.backgroundColor = .white
-        imageView.image = UIImage(named: "default_profile")
+        imageView.image = self.authUser?.avatar ?? UIImage(named: "default_profile")
         imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = 75
         imageView.layer.shadowOffset = CGSize(width: 5, height: 5)
         imageView.layer.shadowOpacity = 0.7
         imageView.layer.shadowRadius = 5
         imageView.layer.shadowColor = UIColor.black.cgColor
-        
+
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.clipsToBounds = true
         
@@ -63,6 +70,7 @@ final class EditProfileViewController: UIViewController {
     
     private lazy var nameTextField: UITextField = {
         let textField = UITextField()
+        textField.text = authUser?.name
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.placeholder = self.namePlaceholder
         textField.font = UIFont.systemFont(ofSize: 16)
@@ -84,19 +92,16 @@ final class EditProfileViewController: UIViewController {
         
         return introduceLabel
     }()
-    
+
     private lazy var introduceTextView: UITextView = {
         let textView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
-        textView.text = introducePlaceholder
+        textView.text = authUser?.introduce
         textView.font = UIFont.systemFont(ofSize: 16)
         textView.layer.borderColor = UIColor.lightGray.cgColor
         textView.layer.borderWidth = 1.0
         textView.layer.cornerRadius = 10.0
         textView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        textView.textColor = .placeholderText
-        
-        textView.delegate = self
         
         return textView
     }()
@@ -112,7 +117,6 @@ final class EditProfileViewController: UIViewController {
         setUpConstraints()
         
         nameTextField.delegate = self
-        introduceTextView.delegate = self
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -163,11 +167,13 @@ final class EditProfileViewController: UIViewController {
     }
 
     @objc func doneButtonTapped(_sender: Any) {
-        showLoadingScreen()
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            self.dismissLoadingScreen()
-        }
+        delegate?.userProfileDidEdit(user: {
+            authUser?.avatar = imageView.image
+            authUser?.name = nameTextField.text
+            authUser?.introduce = introduceTextView.text
+            return authUser!
+        }())
+        navigationController?.popViewController(animated: true)
     }
 
     @objc func changeButtonTapped() {
@@ -299,21 +305,6 @@ extension EditProfileViewController: UIImagePickerControllerDelegate {
 
 extension EditProfileViewController: UINavigationControllerDelegate {
     //
-}
-    
-extension EditProfileViewController: UITextViewDelegate {
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        guard introduceTextView.text == introducePlaceholder else { return }
-        introduceTextView.textColor = .label
-        introduceTextView.text = nil
-    }
-
-    func textViewDidEndEditing(_ textView: UITextView) {
-        if introduceTextView.text.isEmpty {
-            introduceTextView.text = introducePlaceholder
-            introduceTextView.textColor = .placeholderText
-        }
-    }
 }
 
 extension EditProfileViewController {

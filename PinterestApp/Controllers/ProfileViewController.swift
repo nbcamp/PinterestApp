@@ -3,12 +3,20 @@ import UIKit
 final class ProfileViewController: UIViewController {
     private let scrollView = UIScrollView()
     private let stackView = UIStackView()
+    
+    private var authUser = AuthService.shared.user {
+        didSet {
+            userImage.image = authUser?.avatar ?? UIImage(named: "default_profile")
+            userNameLabel.text = authUser?.name
+            userDetail.text = authUser?.introduce
+        }
+    }
 
-    let userImage = UIImageView(image: UIImage(named: "5"))
-    let userNameLabel = UILabel()
-    let userDetail = UILabel()
+    private let userImage = UIImageView()
+    private let userNameLabel = UILabel()
+    private let userDetail = UILabel()
 
-    let editProfileButton = UIButton(type: .system)
+    private let editProfileButton = UIButton(type: .system)
 
     private let subStackView = UIStackView()
     private let userCreatedLabel = UILabel()
@@ -44,6 +52,7 @@ extension ProfileViewController {
         stackView.axis = .vertical
 
         userImage.translatesAutoresizingMaskIntoConstraints = false
+        userImage.image = authUser?.avatar ?? UIImage(named: "default_profile")
         userImage.backgroundColor = .systemGray
         userImage.contentMode = .scaleAspectFill
         userImage.clipsToBounds = true
@@ -59,14 +68,14 @@ extension ProfileViewController {
         userNameLabel.textAlignment = .center
         userNameLabel.font = UIFont.preferredFont(forTextStyle: .largeTitle).withSize(48)
         userNameLabel.adjustsFontForContentSizeCategory = true
-        userNameLabel.text = "Sixteen"
+        userNameLabel.text = authUser?.name
 
         userDetail.translatesAutoresizingMaskIntoConstraints = false
         userDetail.textAlignment = .center
         userDetail.font = UIFont.preferredFont(forTextStyle: .caption2).withSize(16)
         userDetail.adjustsFontForContentSizeCategory = true
         userDetail.numberOfLines = 0
-        userDetail.text = "@user 🌿 Welcome!!"
+        userDetail.text = authUser?.introduce
 
         editProfileButton.translatesAutoresizingMaskIntoConstraints = false
         editProfileButton.backgroundColor = .white
@@ -216,7 +225,10 @@ extension ProfileViewController: PinterestCollectionViewDelegateFlowLayout {
 extension ProfileViewController {
     @objc
     private func editButtonTapped() {
-        navigationController?.pushViewController(EditProfileViewController(), animated: true)
+        let editProfileVC = EditProfileViewController()
+        editProfileVC.authUser = authUser
+        editProfileVC.delegate = self
+        navigationController?.pushViewController(editProfileVC, animated: true)
     }
 
     private enum GridType {
@@ -254,5 +266,11 @@ extension ProfileViewController {
     @objc
     private func plusButtonTapped() {
         navigationController?.pushViewController(NewPostViewController(), animated: true)
+    }
+}
+
+extension ProfileViewController: EditProfileViewControllerDelegate {
+    func userProfileDidEdit(user: User) {
+        authUser = user
     }
 }

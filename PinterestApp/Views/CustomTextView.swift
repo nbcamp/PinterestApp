@@ -13,7 +13,7 @@ final class CustomTextView: UITextView {
         layer.cornerRadius = 10
         layer.borderWidth = 1
         layer.borderColor = UIColor.systemGray.cgColor
-        font = .systemFont(ofSize: 16, weight: .medium)
+        font = .systemFont(ofSize: 16)
         textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         translatesAutoresizingMaskIntoConstraints = false
     }

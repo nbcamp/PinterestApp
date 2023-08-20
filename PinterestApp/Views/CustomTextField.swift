@@ -14,6 +14,7 @@ final class CustomTextField: UITextField {
         layer.borderWidth = 1
         layer.borderColor = UIColor.systemGray.cgColor
         textColor = .label
+        font = .systemFont(ofSize: 16)
         attributedPlaceholder = NSAttributedString(string: "텍스트를 입력하세요.", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
         leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
         leftViewMode = .always

@@ -2,15 +2,18 @@ import UIKit
 
 final class EditProfileViewController: UIViewController {
     private var loadingView: UIView?
+    
+    private let namePlaceholder = "이름을 작성해주세요."
+    private let introducePlaceholder = "자기소개글을 작성해주세요."
    
-    let scrollView: UIScrollView = {
+    private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         
         return scrollView
     }()
     
-    let contentView: UIStackView = {
+    private let contentView: UIStackView = {
         let contentView = UIStackView()
         contentView.axis = .vertical
         contentView.spacing = 20
@@ -19,7 +22,7 @@ final class EditProfileViewController: UIViewController {
         return contentView
     }()
 
-    let imageView: UIImageView = {
+    private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.backgroundColor = .white
         imageView.image = UIImage(named: "default_profile")
@@ -36,47 +39,47 @@ final class EditProfileViewController: UIViewController {
         return imageView
     }()
     
-    lazy var imagePickerController = UIImagePickerController()
+    private lazy var imagePickerController = UIImagePickerController()
     
-    lazy var changeButton: UIButton = {
+    private lazy var changeButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Change", for: .normal)
-        button.addTarget(self, action: #selector(changeButtonTap), for: .touchUpInside)
+        button.addTarget(self, action: #selector(changeButtonTapped), for: .touchUpInside)
         button.setTitleColor(.label, for: .normal)
         
         return button
     }()
     
-    let nameLabel: UILabel = {
+    private let nameLabel: UILabel = {
         let nameLabel = UILabel()
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        nameLabel.text = "Name"
-        nameLabel.font = UIFont.boldSystemFont(ofSize: 15)
+        nameLabel.text = "이름"
+        nameLabel.font = UIFont.boldSystemFont(ofSize: 16)
         nameLabel.textColor = .label
         
         return nameLabel
     }()
     
-    let nameTextField: UITextField = {
+    private lazy var nameTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.placeholder = "name"
-        textField.font = UIFont.systemFont(ofSize: 19)
+        textField.placeholder = self.namePlaceholder
+        textField.font = UIFont.systemFont(ofSize: 16)
         textField.layer.borderColor = UIColor.lightGray.cgColor
         textField.layer.borderWidth = 1.0
-        textField.layer.cornerRadius = 13.0
+        textField.layer.cornerRadius = 10.0
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: textField.frame.height))
         textField.leftViewMode = .always
         
         return textField
     }()
 
-    let introduceLabel: UILabel = {
+    private let introduceLabel: UILabel = {
         let introduceLabel = UILabel()
         introduceLabel.translatesAutoresizingMaskIntoConstraints = false
-        introduceLabel.text = "Introduce"
-        introduceLabel.font = UIFont.boldSystemFont(ofSize: 15)
+        introduceLabel.text = "자기소개"
+        introduceLabel.font = UIFont.boldSystemFont(ofSize: 16)
         introduceLabel.textColor = .label
         
         return introduceLabel
@@ -85,12 +88,12 @@ final class EditProfileViewController: UIViewController {
     private lazy var introduceTextView: UITextView = {
         let textView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
-        textView.text = "Introduce"
-        textView.font = UIFont.systemFont(ofSize: 17)
+        textView.text = introducePlaceholder
+        textView.font = UIFont.systemFont(ofSize: 16)
         textView.layer.borderColor = UIColor.lightGray.cgColor
         textView.layer.borderWidth = 1.0
-        textView.layer.cornerRadius = 15.0
-        textView.textContainerInset = UIEdgeInsets(top: 12, left: 5, bottom: 12, right: 5)
+        textView.layer.cornerRadius = 10.0
+        textView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         textView.textColor = .placeholderText
         
         textView.delegate = self
@@ -116,11 +119,8 @@ final class EditProfileViewController: UIViewController {
     }
 
     private func addNavButtons() {
-        let leftButton = UIBarButtonItem(title: "back", style: .plain, target: self, action: #selector(backButtonTap))
-        let rightButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneButtonTap))
-        leftButton.tintColor = UIColor.label
-        rightButton.tintColor = UIColor.label
-        navigationItem.leftBarButtonItem = leftButton
+        let rightButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneButtonTapped))
+        rightButton.tintColor = .systemBlue
         navigationItem.rightBarButtonItem = rightButton
               
         let titleTextAttributes: [NSAttributedString.Key: Any] = [
@@ -161,12 +161,8 @@ final class EditProfileViewController: UIViewController {
         introduceStackView.spacing = 10
         contentView.addArrangedSubview(introduceStackView)
     }
-    
-    @objc func backButtonTap() {
-        navigationController?.popViewController(animated: true)
-    }
-    
-    @objc func doneButtonTap(_sender: Any) {
+
+    @objc func doneButtonTapped(_sender: Any) {
         showLoadingScreen()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
@@ -174,7 +170,7 @@ final class EditProfileViewController: UIViewController {
         }
     }
 
-    @objc func changeButtonTap() {
+    @objc func changeButtonTapped() {
         present(imagePickerController, animated: true, completion: nil)
     }
 
@@ -263,19 +259,19 @@ final class EditProfileViewController: UIViewController {
             
             nameLabel.topAnchor.constraint(equalTo: changeButton.bottomAnchor, constant: 60.0),
             nameLabel.heightAnchor.constraint(equalToConstant: 20.0),
-            nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 35.0),
-            nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -30.0),
+            nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20.0),
+            nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20.0),
             
-            nameTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 30.0),
-            nameTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -30.0),
+            nameTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20.0),
+            nameTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20.0),
             nameTextField.heightAnchor.constraint(equalToConstant: 40.0),
             
-            introduceLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 35.0),
-            introduceLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -30.0),
+            introduceLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20.0),
+            introduceLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20.0),
             introduceLabel.heightAnchor.constraint(equalToConstant: 20.0),
                         
-            introduceTextView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 30.0),
-            introduceTextView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -30.0),
+            introduceTextView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20.0),
+            introduceTextView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20.0),
             introduceTextView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -50.0),
             introduceTextView.heightAnchor.constraint(equalToConstant: 220.0),
             
@@ -307,14 +303,14 @@ extension EditProfileViewController: UINavigationControllerDelegate {
     
 extension EditProfileViewController: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
-        guard introduceTextView.textColor == .placeholderText else { return }
+        guard introduceTextView.text == introducePlaceholder else { return }
         introduceTextView.textColor = .label
         introduceTextView.text = nil
     }
 
     func textViewDidEndEditing(_ textView: UITextView) {
         if introduceTextView.text.isEmpty {
-            introduceTextView.text = "introduce"
+            introduceTextView.text = introducePlaceholder
             introduceTextView.textColor = .placeholderText
         }
     }

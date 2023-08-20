@@ -71,8 +71,9 @@ class EditPostViewController: UIViewController {
                 image: image,
                 width: image.size.width,
                 height: image.size.height,
+                author: AuthService.shared.user,
                 title: titleTextField.text,
-                description: detailTextView.text
+                caption: detailTextView.text
             ))
         }
         navigationController?.popViewController(animated: true)

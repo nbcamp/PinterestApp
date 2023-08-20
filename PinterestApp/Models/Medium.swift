@@ -4,16 +4,19 @@ final class Medium {
     var image: UIImage
 
     var title: String?
-    var description: String?
+    var caption: String?
 
     var width: Double
     var height: Double
 
-    init(image: UIImage, width: Double, height: Double, title: String? = nil, description: String? = nil) {
+    weak var author: User?
+
+    init(image: UIImage, width: Double, height: Double, author: User? = nil, title: String? = nil, caption: String? = nil) {
         self.image = image
-        self.title = title
-        self.description = description
         self.width = width
         self.height = height
+        self.author = author
+        self.title = title
+        self.caption = caption
     }
 }

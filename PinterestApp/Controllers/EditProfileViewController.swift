@@ -13,14 +13,14 @@ final class EditProfileViewController: UIViewController {
     private let namePlaceholder = "이름을 작성해주세요."
     private let introducePlaceholder = "자기소개글을 작성해주세요."
 
-    private let scrollView: UIScrollView = {
+    private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         
         return scrollView
     }()
 
-    private let contentView: UIStackView = {
+    private lazy var contentView: UIStackView = {
         let contentView = UIStackView()
         contentView.axis = .vertical
         contentView.spacing = 20

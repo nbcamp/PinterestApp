@@ -102,6 +102,10 @@ extension HomeViewController: UICollectionViewDelegate {
 }
 
 extension HomeViewController: UICollectionViewDataSource {
+    final class ImageTapGesture: UITapGestureRecognizer {
+        var medium: Medium?
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return media.count
     }
@@ -113,7 +117,20 @@ extension HomeViewController: UICollectionViewDataSource {
 
         let medium = media[indexPath.item]
         cell.imageView.image = medium.image
+        cell.isUserInteractionEnabled = true
+
+        let tapGesture = ImageTapGesture(target: self, action: #selector(imageCellTapped(_:)))
+        cell.addGestureRecognizer(tapGesture)
+        tapGesture.medium = medium
+
         return cell
+    }
+    
+    @objc
+    private func imageCellTapped(_ sender: ImageTapGesture) {
+        let detailPostVC = DetailPostViewController()
+        detailPostVC.medium = sender.medium
+        navigationController?.pushViewController(detailPostVC, animated: true)
     }
 
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {

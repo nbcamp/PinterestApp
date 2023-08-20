@@ -150,11 +150,11 @@
 			children = (
 				337630812A8CA073003F30B2 /* TabBarController.swift */,
 				337630AE2A8CAE74003F30B2 /* HomeViewController.swift */,
+				337630EE2A8CD73D003F30B2 /* DetailPostViewController.swift */,
 				337630B02A8CAE7C003F30B2 /* NewPostViewController.swift */,
 				4ECA0A082A8DA67C007C9077 /* EditPostViewController.swift */,
 				337630B22A8CAE84003F30B2 /* ProfileViewController.swift */,
 				337630EC2A8CD71B003F30B2 /* EditProfileViewController.swift */,
-				337630EE2A8CD73D003F30B2 /* DetailPostViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";

@@ -5,10 +5,11 @@ final class MediumService {
     private init() {}
 
     private(set) var media: [Medium] = []
+    private(set) var myMedia: [Medium] = []
     private(set) var loading: Bool = false
 
-    func append(medium: Medium) {
-        media.insert(medium, at: 0)
+    func create(medium: Medium) {
+        myMedia.insert(medium, at: 0)
     }
 
     func load(progress: @escaping (Double) -> Void, completion: @escaping ([Medium]?) -> Void) {
@@ -22,13 +23,11 @@ final class MediumService {
         let dispatchGroup = DispatchGroup()
         var rate = (progress: 0, completion: images.count)
         images.forEach { image in
-            dispatchGroup.enter()
-            DispatchQueue.global().async {
+            DispatchQueue.global().async(group: dispatchGroup) {
                 guard let data = try? Data(contentsOf: URL(string: image.url)!),
                       let uiImage = UIImage(data: data)
-                else { return dispatchGroup.leave() }
+                else { return }
                 media.append(Medium(image: uiImage, width: image.width, height: image.height))
-                dispatchGroup.leave()
 
                 DispatchQueue.main.async {
                     rate.progress += 1

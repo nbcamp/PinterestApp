@@ -35,6 +35,12 @@ final class HomeViewController: UIViewController {
         setupTapGesture()
         loadData()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        media = MediumService.shared.myMedia + MediumService.shared.media
+        collectionView.reloadData()
+    }
 
     private func initializeUI() {
         view.backgroundColor = .systemBackground

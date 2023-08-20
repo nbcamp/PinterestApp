@@ -8,34 +8,37 @@
 import UIKit
 
 // 이미지 뷰 클릭시 수정 페이지로 이동시키기
-protocol EditPostViewControllerDelegate: class {
+protocol EditPostViewControllerDelegate: AnyObject {
     func sendImage(_ imageString: UIImage) -> UIImage
 }
 
 class EditPostViewController: UIViewController {
-    let picker = UIImagePickerController()
-    let customScrollView = CustomScrollView()
-    let customContentView = ContentView()
-    var imageView = CustomImageView(image: nil)
-    let customTextField = CustomTextField()
-    let customTitleLable = CustomLabel()
-    let customDetailLabel = CustomLabel()
-    let customDetailTextView = CustomTextView()
-    let editImageButton = CustomButton()
-    let customUIBarButtonItem = CustomUIBarButtonItem()
-    let customBackButton = CustomUIBarButtonItem()
-
     var galleryImage: UIImage?
     weak var delegate: EditPostViewControllerDelegate?
 
-    let textViewPlaceHolder = "내용을 입력하세요."
-    var textViewYValue = CGFloat(0)
+    private let picker = UIImagePickerController()
+    private let scrollView = UIScrollView()
+    private let contentView = UIView()
+    private var imageView = UIImageView()
+
+    private let titleLabel = UILabel()
+    private let titleTextField = CustomTextField()
+
+    private let detailLabel = UILabel()
+    private let detailTextView = CustomTextView()
+
+    private let doneButton = UIBarButtonItem()
+    private let backButton = UIBarButtonItem()
+
+    private let titlePlaceholder = "제목을 입력해주세요."
+    private let detailPlaceholder = "설명을 입력해주세요."
+    private var textFieldPosY = CGFloat(0)
 
     override func viewDidLoad() {
         super.viewDidLoad()
         picker.delegate = self
-        customTextField.delegate = self
-        customDetailTextView.delegate = self
+        titleTextField.delegate = self
+        detailTextView.delegate = self
 
         hideKeyboardWhenTappedAround()
         setupCustomNavigationBar()
@@ -49,11 +52,11 @@ class EditPostViewController: UIViewController {
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        customTextField.becomeFirstResponder()
-        customDetailTextView.becomeFirstResponder()
+        titleTextField.becomeFirstResponder()
+        detailTextView.becomeFirstResponder()
     }
 
-    @objc func customBackbuttonAction(_ sender: UIBarButtonItem) {
+    @objc func backButtonAction(_ sender: UIBarButtonItem) {
         navigationController?.popViewController(animated: true)
         tabBarController?.selectedIndex = 0
     }
@@ -63,6 +66,15 @@ class EditPostViewController: UIViewController {
     }
 
     @objc func tappedDoneButton(_ sender: UIBarButtonItem) {
+        if let image = imageView.image {
+            MediumService.shared.create(medium: .init(
+                image: image,
+                width: image.size.width,
+                height: image.size.height,
+                title: titleTextField.text,
+                description: detailTextView.text
+            ))
+        }
         navigationController?.popViewController(animated: true)
         tabBarController?.selectedIndex = 0
     }
@@ -74,22 +86,21 @@ class EditPostViewController: UIViewController {
     }
 
     private func setupCustomNavigationBar() {
-        navigationItem.rightBarButtonItem = customUIBarButtonItem
-        navigationItem.leftBarButtonItem = customBackButton
+        doneButton.title = "Done"
 
-        customUIBarButtonItem.target = self
-        customUIBarButtonItem.action = #selector(tappedDoneButton(_:))
+        navigationItem.rightBarButtonItem = doneButton
+        navigationItem.leftBarButtonItem = backButton
 
-        customBackButton.image = UIImage(systemName: "chevron.backward")
-        customBackButton.target = self
-        customBackButton.action = #selector(customBackbuttonAction(_:))
+        doneButton.target = self
+        doneButton.action = #selector(tappedDoneButton(_:))
+
+        backButton.image = UIImage(systemName: "chevron.backward")
+        backButton.target = self
+        backButton.action = #selector(backButtonAction(_:))
     }
 
     private func setupUI() {
         view.backgroundColor = .systemBackground
-
-        customDetailTextView.text = textViewPlaceHolder
-        customDetailTextView.textColor = .lightGray
 
         picker.sourceType = .photoLibrary
         picker.allowsEditing = true
@@ -97,75 +108,80 @@ class EditPostViewController: UIViewController {
         imageView.image = galleryImage
         imageView.contentMode = .scaleToFill
 
-        customTitleLable.text = "제목 입력"
+        titleLabel.text = "제목"
+        titleLabel.font = .boldSystemFont(ofSize: 16)
+        titleTextField.placeholder = titlePlaceholder
 
-        customTextField.placeholder = "텍스트를 입력하세요."
+        detailLabel.text = "설명"
+        detailLabel.font = .boldSystemFont(ofSize: 16)
+        detailTextView.text = detailPlaceholder
+        detailTextView.textColor = .systemGray2
 
-        customDetailLabel.text = "내용 입력"
-
-        [customScrollView].forEach {
+        [scrollView].forEach {
             view.addSubview($0)
         }
 
-        [customContentView].forEach {
-            customScrollView.addSubview($0)
+        [contentView].forEach {
+            scrollView.addSubview($0)
         }
 
-        customScrollView.addSubview(customContentView)
-        [imageView, customTitleLable, customTextField, customDetailLabel, customDetailTextView].forEach {
-            customContentView.addSubview($0)
+        scrollView.addSubview(contentView)
+        [imageView, titleLabel, titleTextField, detailLabel, detailTextView].forEach {
+            contentView.addSubview($0)
         }
     }
 
     func setupLayout() {
+        [scrollView, contentView, imageView, titleLabel, titleTextField, detailLabel, detailTextView].forEach { removeDefaultConstraints(view: $0) }
+
         let layoutGuide = view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
             // 스크롤뷰
-            customScrollView.topAnchor.constraint(equalTo: layoutGuide.topAnchor, constant: 0),
-            customScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
-            customScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
-            customScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0),
+            scrollView.topAnchor.constraint(equalTo: layoutGuide.topAnchor, constant: 0),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0),
 
             // 컨텐츠 뷰
-            customContentView.topAnchor.constraint(equalTo: customScrollView.topAnchor),
-            customContentView.leadingAnchor.constraint(equalTo: customScrollView.leadingAnchor),
-            customContentView.trailingAnchor.constraint(equalTo: customScrollView.trailingAnchor),
-            customContentView.bottomAnchor.constraint(equalTo: customScrollView.bottomAnchor),
-            customContentView.widthAnchor.constraint(equalTo: customScrollView.widthAnchor),
-            customContentView.heightAnchor.constraint(equalTo: customScrollView.heightAnchor),
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            contentView.heightAnchor.constraint(equalTo: scrollView.heightAnchor),
 
             // 이미지 뷰
-            imageView.topAnchor.constraint(equalTo: customContentView.topAnchor, constant: 0),
-            imageView.leadingAnchor.constraint(equalTo: customContentView.leadingAnchor, constant: 0),
-            imageView.trailingAnchor.constraint(equalTo: customContentView.trailingAnchor, constant: 0),
-            imageView.bottomAnchor.constraint(equalTo: customTitleLable.topAnchor, constant: 0),
+            imageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0),
+            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0),
+            imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0),
+            imageView.bottomAnchor.constraint(equalTo: titleLabel.topAnchor, constant: 0),
             imageView.widthAnchor.constraint(equalToConstant: 390),
             imageView.heightAnchor.constraint(equalToConstant: 300),
 
             // 제목 입력 표시 라벨
-            customTitleLable.centerXAnchor.constraint(equalTo: customScrollView.centerXAnchor),
-            customTitleLable.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 0),
-            customTitleLable.leadingAnchor.constraint(equalTo: customScrollView.leadingAnchor, constant: 40),
-            customTitleLable.heightAnchor.constraint(equalToConstant: 40),
+            titleLabel.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+            titleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 10),
+            titleLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20),
+            titleLabel.heightAnchor.constraint(equalToConstant: 40),
 
             // 제목 입력할 수 있는 텍스트 필드
-            customTextField.centerXAnchor.constraint(equalTo: customScrollView.centerXAnchor),
-            customTextField.topAnchor.constraint(equalTo: customTitleLable.bottomAnchor, constant: 5),
-            customTextField.leadingAnchor.constraint(equalTo: customScrollView.leadingAnchor, constant: 40),
-            customTextField.heightAnchor.constraint(equalToConstant: 60),
+            titleTextField.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+            titleTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 5),
+            titleTextField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20),
+            titleTextField.heightAnchor.constraint(equalToConstant: 60),
 
             // 내용 입력 표시 라벨
-            customDetailLabel.centerXAnchor.constraint(equalTo: customScrollView.centerXAnchor),
-            customDetailLabel.topAnchor.constraint(equalTo: customTextField.bottomAnchor, constant: 5),
-            customDetailLabel.leadingAnchor.constraint(equalTo: customScrollView.leadingAnchor, constant: 40),
-            customDetailLabel.heightAnchor.constraint(equalToConstant: 40),
+            detailLabel.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+            detailLabel.topAnchor.constraint(equalTo: titleTextField.bottomAnchor, constant: 10),
+            detailLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20),
+            detailLabel.heightAnchor.constraint(equalToConstant: 40),
 
             // 내용 입력할 수 있는 텍스트 뷰
-            customDetailTextView.centerXAnchor.constraint(equalTo: customScrollView.centerXAnchor),
-            customDetailTextView.topAnchor.constraint(equalTo: customDetailLabel.bottomAnchor, constant: 0),
-            customDetailTextView.bottomAnchor.constraint(equalTo: customScrollView.bottomAnchor, constant: -10),
-            customDetailTextView.leadingAnchor.constraint(equalTo: customScrollView.leadingAnchor, constant: 40),
-            customDetailTextView.heightAnchor.constraint(equalToConstant: 300),
+            detailTextView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+            detailTextView.topAnchor.constraint(equalTo: detailLabel.bottomAnchor, constant: 0),
+            detailTextView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -10),
+            detailTextView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20),
+            detailTextView.heightAnchor.constraint(equalToConstant: 300),
         ])
     }
 }
@@ -174,7 +190,7 @@ class EditPostViewController: UIViewController {
 
 extension EditPostViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        customTextField.resignFirstResponder()
+        titleTextField.resignFirstResponder()
         dismiss(animated: true, completion: nil)
         return true
     }
@@ -195,21 +211,21 @@ extension EditPostViewController: UITextViewDelegate {
     }
 
     func textViewDidBeginEditing(_ textView: UITextView) {
-        if customDetailTextView.text == textViewPlaceHolder {
-            customDetailTextView.text = nil
-            customDetailTextView.textColor = .black
+        if detailTextView.text == detailPlaceholder {
+            detailTextView.text = nil
+            detailTextView.textColor = .label
         }
     }
 
     func textViewDidEndEditing(_ textView: UITextView) {
-        if customDetailTextView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            customDetailTextView.text = textViewPlaceHolder
-            customDetailTextView.textColor = .lightGray
+        if detailTextView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            detailTextView.text = detailPlaceholder
+            detailTextView.textColor = .systemGray2
         }
     }
 
     func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
-        customDetailTextView.resignFirstResponder()
+        detailTextView.resignFirstResponder()
         return true
     }
 }
@@ -261,47 +277,47 @@ extension EditPostViewController {
     }
 
     @objc func keyboardWillShow(notification: NSNotification) {
-        customScrollView.isScrollEnabled = false
-        if customTextField.isFirstResponder {
+        scrollView.isScrollEnabled = false
+        if titleTextField.isFirstResponder {
             if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-                if customContentView.frame.origin.y == textViewYValue {
-                    customContentView.frame.origin.y -= keyboardSize.height / 3 - UIApplication.shared.windows.first!.safeAreaInsets.bottom
+                if contentView.frame.origin.y == textFieldPosY {
+                    contentView.frame.origin.y -= keyboardSize.height / 3 - UIApplication.shared.windows.first!.safeAreaInsets.bottom
                 }
             }
-        } else if customDetailTextView.isFirstResponder {
+        } else if detailTextView.isFirstResponder {
             if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-                if customContentView.frame.origin.y == textViewYValue {
-                    customContentView.frame.origin.y -= keyboardSize.height * 1.2 - UIApplication.shared.windows.first!.safeAreaInsets.bottom
+                if contentView.frame.origin.y == textFieldPosY {
+                    contentView.frame.origin.y -= keyboardSize.height * 1.2 - UIApplication.shared.windows.first!.safeAreaInsets.bottom
                 }
             }
         }
     }
 
     @objc func keyboardDidShow(notification: NSNotification) {
-        customScrollView.isScrollEnabled = false
-        if customTextField.isFirstResponder {
-            customDetailTextView.isEditable = false
+        scrollView.isScrollEnabled = false
+        if titleTextField.isFirstResponder {
+            detailTextView.isEditable = false
             if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-                if customContentView.frame.origin.y == textViewYValue {
-                    customContentView.frame.origin.y -= keyboardSize.height / 3 - UIApplication.shared.windows.first!.safeAreaInsets.bottom
+                if contentView.frame.origin.y == textFieldPosY {
+                    contentView.frame.origin.y -= keyboardSize.height / 3 - UIApplication.shared.windows.first!.safeAreaInsets.bottom
                 }
             }
-        } else if customDetailTextView.isFirstResponder {
-            customTextField.isEnabled = false
+        } else if detailTextView.isFirstResponder {
+            titleTextField.isEnabled = false
             if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-                if customContentView.frame.origin.y == textViewYValue {
-                    customDetailTextView.frame.origin.y -= keyboardSize.height * 1.2 - UIApplication.shared.windows.first!.safeAreaInsets.bottom
+                if contentView.frame.origin.y == textFieldPosY {
+                    detailTextView.frame.origin.y -= keyboardSize.height * 1.2 - UIApplication.shared.windows.first!.safeAreaInsets.bottom
                 }
             }
         }
     }
 
     @objc func keyboardWillHide(notification: NSNotification) {
-        if customContentView.frame.origin.y != textViewYValue {
-            customContentView.frame.origin.y = textViewYValue
-            customScrollView.isScrollEnabled = true
-            customDetailTextView.isEditable = true
-            customTextField.isEnabled = true
+        if contentView.frame.origin.y != textFieldPosY {
+            contentView.frame.origin.y = textFieldPosY
+            scrollView.isScrollEnabled = true
+            detailTextView.isEditable = true
+            titleTextField.isEnabled = true
         }
     }
 }

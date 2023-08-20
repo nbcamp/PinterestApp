@@ -3,12 +3,20 @@ import UIKit
 final class ProfileViewController: UIViewController {
     private let scrollView = UIScrollView()
     private let stackView = UIStackView()
+    
+    private var authUser = AuthService.shared.user {
+        didSet {
+            userImage.image = authUser?.avatar ?? UIImage(named: "default_profile")
+            userNameLabel.text = authUser?.name
+            userDetail.text = authUser?.introduce
+        }
+    }
 
-    let userImage = UIImageView(image: UIImage(named: "5"))
-    let userNameLabel = UILabel()
-    let userDetail = UILabel()
+    private let userImage = UIImageView()
+    private let userNameLabel = UILabel()
+    private let userDetail = UILabel()
 
-    let editProfileButton = UIButton(type: .system)
+    private let editProfileButton = UIButton(type: .system)
 
     private let subStackView = UIStackView()
     private let userCreatedLabel = UILabel()
@@ -19,7 +27,7 @@ final class ProfileViewController: UIViewController {
 
     var columns = 2
 
-    private var media: [Medium] { MediumService.shared.media }
+    private var media: [Medium] = []
 
     private var currentGridType: GridType = .square2x2
 
@@ -28,9 +36,11 @@ final class ProfileViewController: UIViewController {
         setupStyle()
         setupLayout()
     }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        media = MediumService.shared.myMedia
+        collectionView.reloadData()
     }
 }
 
@@ -44,9 +54,12 @@ extension ProfileViewController {
         stackView.axis = .vertical
 
         userImage.translatesAutoresizingMaskIntoConstraints = false
+        userImage.image = authUser?.avatar ?? UIImage(named: "default_profile")
         userImage.backgroundColor = .systemGray
         userImage.contentMode = .scaleAspectFill
         userImage.clipsToBounds = true
+        userImage.layer.borderWidth = 2.0
+        userImage.layer.borderColor = UIColor.white.cgColor
         userImage.layer.cornerRadius = 75
         userImage.layer.shadowOffset = CGSize(width: 5, height: 5)
         userImage.layer.shadowOpacity = 0.7
@@ -57,20 +70,22 @@ extension ProfileViewController {
         userNameLabel.textAlignment = .center
         userNameLabel.font = UIFont.preferredFont(forTextStyle: .largeTitle).withSize(48)
         userNameLabel.adjustsFontForContentSizeCategory = true
-        userNameLabel.text = "Sixteen"
+        userNameLabel.text = authUser?.name
 
         userDetail.translatesAutoresizingMaskIntoConstraints = false
         userDetail.textAlignment = .center
         userDetail.font = UIFont.preferredFont(forTextStyle: .caption2).withSize(16)
         userDetail.adjustsFontForContentSizeCategory = true
         userDetail.numberOfLines = 0
-        userDetail.text = "@user 🌿 Welcome!!"
+        userDetail.text = authUser?.introduce
 
         editProfileButton.translatesAutoresizingMaskIntoConstraints = false
-        editProfileButton.backgroundColor = .systemGray
-        editProfileButton.setTitle("Edit", for: .normal)
+        editProfileButton.backgroundColor = .white
+        editProfileButton.setTitle("변경", for: .normal)
         editProfileButton.setTitleColor(.darkText, for: .normal)
         editProfileButton.layer.cornerRadius = 5
+        editProfileButton.layer.borderWidth = 1.0
+        editProfileButton.layer.borderColor = UIColor.systemGray.cgColor
         editProfileButton.addTarget(self, action: #selector(editButtonTapped), for: .touchUpInside)
 
         subStackView.translatesAutoresizingMaskIntoConstraints = false
@@ -80,16 +95,16 @@ extension ProfileViewController {
         userCreatedLabel.textAlignment = .center
         userCreatedLabel.font = UIFont.preferredFont(forTextStyle: .headline)
         userCreatedLabel.adjustsFontForContentSizeCategory = true
-        userCreatedLabel.text = "Created"
+        userCreatedLabel.text = "My Posting"
 
         gridButton.translatesAutoresizingMaskIntoConstraints = false
         gridButton.setImage(UIImage(systemName: "square.grid.2x2.fill"), for: .normal)
-        gridButton.tintColor = .darkText
+        gridButton.tintColor = .label
         gridButton.addTarget(self, action: #selector(gridButtonTapped), for: .touchUpInside)
 
         plusButton.translatesAutoresizingMaskIntoConstraints = false
         plusButton.setImage(UIImage(systemName: "plus"), for: .normal)
-        plusButton.tintColor = .darkText
+        plusButton.tintColor = .label
         plusButton.addTarget(self, action: #selector(plusButtonTapped), for: .touchUpInside)
 
         let layout = PinterestCollectionViewFlowLayout()
@@ -212,7 +227,10 @@ extension ProfileViewController: PinterestCollectionViewDelegateFlowLayout {
 extension ProfileViewController {
     @objc
     private func editButtonTapped() {
-        navigationController?.pushViewController(EditProfileViewController(), animated: true)
+        let editProfileVC = EditProfileViewController()
+        editProfileVC.authUser = authUser
+        editProfileVC.delegate = self
+        navigationController?.pushViewController(editProfileVC, animated: true)
     }
 
     private enum GridType {
@@ -245,11 +263,16 @@ extension ProfileViewController {
         layout.invalidateLayout()
 
         collectionView.reloadData()
-        print("CollectionView columns: \(columns)")
     }
 
     @objc
     private func plusButtonTapped() {
         navigationController?.pushViewController(NewPostViewController(), animated: true)
+    }
+}
+
+extension ProfileViewController: EditProfileViewControllerDelegate {
+    func userProfileDidEdit(user: User) {
+        authUser = user
     }
 }

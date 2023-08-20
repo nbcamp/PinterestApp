@@ -10,15 +10,12 @@ import UIKit
 final class CustomTextView: UITextView {
     override init(frame: CGRect, textContainer: NSTextContainer?) {
         super.init(frame: frame, textContainer: textContainer)
-        self.text = ""
-        self.textColor = .black
-        self.backgroundColor = .clear
-        self.layer.cornerRadius = 10
-        self.layer.borderWidth = 1
-        self.layer.borderColor = UIColor.black.cgColor
-        self.font = .systemFont(ofSize: 18, weight: .medium)
-        self.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        self.translatesAutoresizingMaskIntoConstraints = false
+        layer.cornerRadius = 10
+        layer.borderWidth = 1
+        layer.borderColor = UIColor.systemGray.cgColor
+        font = .systemFont(ofSize: 16, weight: .medium)
+        textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        translatesAutoresizingMaskIntoConstraints = false
     }
 
     @available(*, unavailable)

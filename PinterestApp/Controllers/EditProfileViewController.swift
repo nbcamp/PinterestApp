@@ -7,19 +7,19 @@ protocol EditProfileViewControllerDelegate: AnyObject {
 final class EditProfileViewController: UIViewController {
     var authUser: User?
     weak var delegate: EditProfileViewControllerDelegate?
-    
+
     private var loadingView: UIView?
-    
+
     private let namePlaceholder = "이름을 작성해주세요."
     private let introducePlaceholder = "자기소개글을 작성해주세요."
-   
+
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         
         return scrollView
     }()
-    
+
     private let contentView: UIStackView = {
         let contentView = UIStackView()
         contentView.axis = .vertical

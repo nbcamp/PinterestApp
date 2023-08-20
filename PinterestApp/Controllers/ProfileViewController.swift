@@ -27,7 +27,7 @@ final class ProfileViewController: UIViewController {
 
     var columns = 2
 
-    private var media: [Medium] { MediumService.shared.media }
+    private var media: [Medium] = []
 
     private var currentGridType: GridType = .square2x2
 
@@ -36,9 +36,11 @@ final class ProfileViewController: UIViewController {
         setupStyle()
         setupLayout()
     }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        media = MediumService.shared.myMedia
+        collectionView.reloadData()
     }
 }
 

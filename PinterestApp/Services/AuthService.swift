@@ -18,7 +18,6 @@ final class AuthService {
     func update(user: User, completion: ((User) -> Void)? = nil) {
         // 서버 사용자 정보 변경 요청 후 사용자 반환
         self.user = user
-        print(self.user)
         completion?(user)
     }
 }

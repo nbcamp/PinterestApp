@@ -66,6 +66,15 @@ class EditPostViewController: UIViewController {
     }
 
     @objc func tappedDoneButton(_ sender: UIBarButtonItem) {
+        if let image = imageView.image {
+            MediumService.shared.create(medium: .init(
+                image: image,
+                width: image.size.width,
+                height: image.size.height,
+                title: titleTextField.text,
+                description: detailTextView.text
+            ))
+        }
         navigationController?.popViewController(animated: true)
         tabBarController?.selectedIndex = 0
     }
@@ -78,7 +87,7 @@ class EditPostViewController: UIViewController {
 
     private func setupCustomNavigationBar() {
         doneButton.title = "Done"
-        
+
         navigationItem.rightBarButtonItem = doneButton
         navigationItem.leftBarButtonItem = backButton
 
